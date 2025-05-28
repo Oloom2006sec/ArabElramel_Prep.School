@@ -16,29 +16,42 @@
 </head>
 <body>
 
-  <header>
-    <h1>مدرسة الأمل</h1>
-    <p>مرحبًا بكم في الموقع الرسمي للمدرسة</p>
-  </header>
-
-  <nav>
-    <a href="index.html">الرئيسية</a>
-    <a href="news.html">الأخبار</a>
-    <a href="results.html">نتائج الطلاب</a>
-    <a href="contact.html">تواصل معنا</a>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">مدرسة الأمل</a>
+      <div>
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="index.html">الرئيسية</a></li>
+          <li class="nav-item"><a class="nav-link" href="news.html">الأخبار</a></li>
+          <li class="nav-item"><a class="nav-link" href="results.html">النتائج</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html">تواصل معنا</a></li>
+        </ul>
+      </div>
+    </div>
   </nav>
 
-  <section>
-    <h2>أهم الأخبار</h2>
-    <ul>
-      <li>بدء امتحانات نهاية العام في 1 يونيو</li>
-      <li>رحلة إلى مكتبة الإسكندرية يوم 10 يونيو</li>
-    </ul>
-  </section>
+  <!-- Hero Section -->
+  <div class="container text-center">
+    <div class="mt-5 p-5 bg-light rounded shadow">
+      <h1 class="display-4">مرحبًا بكم في مدرسة الأمل</h1>
+      <p class="lead">أحدث الأخبار، نتائج الطلاب، والتواصل مع الإدارة</p>
+    </div>
 
-  <footer>
-    &copy; 2025 مدرسة الأمل
+    <div class="mt-4">
+      <h2>أحدث الأخبار</h2>
+      <ul class="list-group">
+        <li class="list-group-item">📅 بدء امتحانات نهاية العام في 1 يونيو</li>
+        <li class="list-group-item">📚 رحلة إلى مكتبة الإسكندرية يوم 10 يونيو</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center p-3 mt-5">
+    &copy; 2025 مدرسة الأمل. جميع الحقوق محفوظة.
   </footer>
 
 </body>
+
 </html>
