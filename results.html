@@ -44,7 +44,7 @@ function fetchAndDisplay(sheetName, seatNumber = '') {
     .then(data => {
       const area = document.getElementById('resultArea');
       area.innerHTML = '';
-      const filtered = seatNumber ? data.filter(row => (row['رقم الجلوس'] || '').trim() === seatNumber) : data;
+      const filtered = seatNumber ? data.filter(row => String(row['رقم الجلوس']).trim() === seatNumber) : data;
 
       if (filtered.length === 0) {
         area.innerHTML = `<div class='alert alert-warning'>لا توجد نتائج بهذا الرقم.</div>`;
