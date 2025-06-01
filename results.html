@@ -44,7 +44,8 @@ function fetchAndDisplay(sheetName, seatNumber = '') {
     .then(data => {
       const area = document.getElementById('resultArea');
       area.innerHTML = '';
-      const filtered = seatNumber ? data.filter(row => row['رقم الجلوس'] === seatNumber) : data;
+      const filtered = seatNumber ? data.filter(row => (row['رقم الجلوس'] || '').trim() === seatNumber) : data;
+
 
       if (filtered.length === 0) {
         area.innerHTML = `<div class='alert alert-warning'>لا توجد نتائج بهذا الرقم.</div>`;
@@ -53,7 +54,8 @@ function fetchAndDisplay(sheetName, seatNumber = '') {
 
       filtered.forEach(row => {
         let result = '<div class="card result-card"><div class="card-body">';
-        result += `<h5 class="card-title">${row['الاسم']} - رقم الجلوس ${row['رقم الجلوس']}</h5><ul class="list-group list-group-flush">`;
+        result += `<h5 class="card-title">${row['الاسم'] || 'بدون اسم'} - رقم الجلوس ${row['رقم الجلوس'] || 'غير محدد'}</h5><ul class="list-group list-group-flush">`;
+
         for (let key in row) {
           if (key !== 'الاسم' && key !== 'رقم الجلوس') {
             result += `<li class="list-group-item">${key}: ${row[key]}</li>`;
