@@ -17,7 +17,7 @@
   
   <ul class="nav nav-tabs mb-3" id="gradeTabs">
     <li class="nav-item">
-      <a class="nav-link active" data-grade="اولى" href="#">الصف الأول الإعدادي</a>
+      <a class="nav-link active" data-grade="Sheet1" href="#">الصف الأول الإعدادي</a>
     </li>
     <li class="nav-item">
       <a class="nav-link" data-grade="ثانية" href="#">الصف الثاني الإعدادي</a>
@@ -35,8 +35,8 @@
 </div>
 
 <script>
-const sheetBaseURL = 'https://opensheet.elk.sh/1y7NekqhM3tJ8FCQFiBKtJpOwtJrfY13rtiWF6M-Ttcg/';
-let currentSheet = 'اولى';
+const sheetBaseURL = 'https://opensheet.elk.sh/1frIMSVyieY1niglJr3dSBWjCCBiPV8H1E0ZXxCC2aKQ/';
+let currentSheet = 'Sheet1';
 
 function fetchAndDisplay(sheetName, seatNumber = '') {
   fetch(sheetBaseURL + sheetName)
@@ -45,7 +45,6 @@ function fetchAndDisplay(sheetName, seatNumber = '') {
       const area = document.getElementById('resultArea');
       area.innerHTML = '';
       const filtered = seatNumber ? data.filter(row => (row['رقم الجلوس'] || '').trim() === seatNumber) : data;
-
 
       if (filtered.length === 0) {
         area.innerHTML = `<div class='alert alert-warning'>لا توجد نتائج بهذا الرقم.</div>`;
