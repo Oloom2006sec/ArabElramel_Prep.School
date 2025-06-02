@@ -1,13 +1,39 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>نتائج الطلاب - مدرسة عرب الرمل الإعدادية المشتركة</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo&display=swap" rel="stylesheet" />
   <style>
-    body { padding: 40px 20px; font-family: 'Cairo', sans-serif; }
-    .result-card { margin-top: 20px; }
+    body {
+      padding: 40px 20px;
+      font-family: 'Cairo', sans-serif;
+      background: #f7f9fc;
+    }
+    .result-card {
+      margin-top: 20px;
+      box-shadow: 0 3px 15px rgb(0 0 0 / 0.1);
+      border-radius: 10px;
+      background: white;
+      padding: 20px;
+      transition: box-shadow 0.3s ease;
+    }
+    .result-card:hover {
+      box-shadow: 0 5px 25px rgb(0 0 0 / 0.15);
+    }
+    #loadingSpinner {
+      display: none;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .btn-group-custom {
+      margin-top: 15px;
+    }
+    .share-btn {
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -28,69 +54,136 @@
   </ul>
 
   <div class="mb-3">
-    <input type="text" id="searchInput" class="form-control" placeholder="اكتب رقم الجلوس">
+    <input type="text" id="searchInput" class="form-control" placeholder="اكتب رقم الجلوس" />
     <button id="searchBtn" class="btn btn-primary mt-2 w-100">عرض النتيجة</button>
   </div>
 
+  <div id="loadingSpinner" class="d-flex">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">جارٍ التحميل...</span>
+    </div>
+  </div>
+
   <div id="resultArea"></div>
+
+  <div class="btn-group btn-group-custom" role="group" aria-label="Actions">
+    <button id="printBtn" class="btn btn-success" disabled>🖨️ طباعة النتيجة</button>
+    <button id="shareBtn" class="btn btn-info" disabled>📤 مشاركة النتيجة</button>
+    <a href="index.html" class="btn btn-secondary">🏠 الصفحة الرئيسية</a>
+  </div>
 </div>
 
 <script>
 const sheetBaseURL = 'https://opensheet.elk.sh/1y7NekqhM3tJ8FCQFiBKtJpOwtJrfY13rtiWF6M-Ttcg/';
 let currentSheet = 'أولى';
 
-function fetchAndDisplay(sheetName, seatNumber = '') {
-  fetch(sheetBaseURL + sheetName)
-    .then(res => res.json())
-    .then(data => {
-      const area = document.getElementById('resultArea');
-      area.innerHTML = '';
-      const filtered = seatNumber ? data.filter(row => String(row['رقم الجلوس']).trim() === seatNumber) : [];
+const resultArea = document.getElementById('resultArea');
+const loadingSpinner = document.getElementById('loadingSpinner');
+const printBtn = document.getElementById('printBtn');
+const shareBtn = document.getElementById('shareBtn');
 
-      if (filtered.length === 0) {
-        area.innerHTML = `<div class='alert alert-warning'>لا توجد نتائج بهذا الرقم.</div>`;
-        return;
-      }
-
-      filtered.forEach(row => {
-        let result = '<div class="card result-card"><div class="card-body">';
-        result += `<h5 class="card-title">${row['الاسم'] || 'بدون اسم'} - رقم الجلوس ${row['رقم الجلوس'] || 'غير محدد'}</h5><ul class="list-group list-group-flush">`;
-
-        for (let key in row) {
-          if (key !== 'الاسم' && key !== 'رقم الجلوس') {
-            result += `<li class="list-group-item">${key}: ${row[key]}</li>`;
-          }
-        }
-        result += '</ul></div></div>';
-        area.innerHTML += result;
-      });
-    });
+function showLoading(show) {
+  loadingSpinner.style.display = show ? 'flex' : 'none';
 }
 
-// Initial load with no results
-fetch(sheetBaseURL + currentSheet); // Just pre-warm the call
+function formatResultCard(row) {
+  let result = `<div class="result-card" id="resultCard"><h5>${row['الاسم'] || 'بدون اسم'} - رقم الجلوس ${row['رقم الجلوس'] || 'غير محدد'}</h5><ul class="list-group list-group-flush mt-3">`;
+  for (let key in row) {
+    if (key !== 'الاسم' && key !== 'رقم الجلوس') {
+      result += `<li class="list-group-item"><strong>${key}:</strong> ${row[key]}</li>`;
+    }
+  }
+  result += '</ul></div>';
+  return result;
+}
 
-// Tab click handler
-const tabs = document.querySelectorAll('[data-grade]');
-tabs.forEach(tab => {
+async function fetchAndDisplay(sheetName, seatNumber = '') {
+  showLoading(true);
+  resultArea.innerHTML = '';
+  printBtn.disabled = true;
+  shareBtn.disabled = true;
+
+  try {
+    const res = await fetch(sheetBaseURL + sheetName);
+    const data = await res.json();
+
+    const filtered = seatNumber ? data.filter(row => String(row['رقم الجلوس']).trim() === seatNumber) : [];
+
+    if (filtered.length === 0) {
+      resultArea.innerHTML = `<div class='alert alert-warning'>لا توجد نتائج بهذا الرقم.</div>`;
+    } else {
+      filtered.forEach(row => {
+        resultArea.innerHTML += formatResultCard(row);
+      });
+      printBtn.disabled = false;
+      shareBtn.disabled = false;
+    }
+  } catch (error) {
+    resultArea.innerHTML = `<div class='alert alert-danger'>حدث خطأ أثناء تحميل البيانات.</div>`;
+  } finally {
+    showLoading(false);
+  }
+}
+
+// طباعة النتيجة
+printBtn.addEventListener('click', () => {
+  const printContents = document.getElementById('resultCard');
+  if (printContents) {
+    const originalContents = document.body.innerHTML;
+    document.body.innerHTML = printContents.outerHTML;
+    window.print();
+    document.body.innerHTML = originalContents;
+    window.location.reload();
+  }
+});
+
+// مشاركة النتيجة (واتساب، تويتر، فيسبوك)
+shareBtn.addEventListener('click', () => {
+  const card = document.getElementById('resultCard');
+  if (!card) return alert('لا توجد نتيجة للمشاركة.');
+
+  const name = card.querySelector('h5').innerText;
+  let details = '';
+  card.querySelectorAll('li').forEach(li => {
+    details += `${li.innerText}\n`;
+  });
+
+  const text = encodeURIComponent(`${name}\n${details}\nنتيجة مدرسة عرب الرمل الإعدادية`);
+  const whatsappURL = `https://wa.me/?text=${text}`;
+  const twitterURL = `https://twitter.com/intent/tweet?text=${text}`;
+  const facebookURL = `https://www.facebook.com/sharer/sharer.php?u=&quote=${text}`;
+
+  const shareWindow = window.open('', '_blank', 'width=600,height=400');
+  shareWindow.document.write(`
+    <h4>مشاركة النتيجة عبر:</h4>
+    <ul>
+      <li><a href="${whatsappURL}" target="_blank">واتساب</a></li>
+      <li><a href="${twitterURL}" target="_blank">تويتر</a></li>
+      <li><a href="${facebookURL}" target="_blank">فيسبوك</a></li>
+    </ul>
+  `);
+});
+
+// تبويب الصفوف
+document.querySelectorAll('[data-grade]').forEach(tab => {
   tab.addEventListener('click', (e) => {
     e.preventDefault();
-    tabs.forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('[data-grade]').forEach(t => t.classList.remove('active'));
     tab.classList.add('active');
     currentSheet = tab.getAttribute('data-grade');
-    document.getElementById('resultArea').innerHTML = '';
+    resultArea.innerHTML = '';
+    printBtn.disabled = true;
+    shareBtn.disabled = true;
   });
 });
 
-// Search button handler
-const btn = document.getElementById('searchBtn');
-btn.addEventListener('click', () => {
-  const value = document.getElementById('searchInput').value.trim();
-  if (value !== '') {
-    fetchAndDisplay(currentSheet, value);
+// زر البحث
+document.getElementById('searchBtn').addEventListener('click', () => {
+  const val = document.getElementById('searchInput').value.trim();
+  if (val) {
+    fetchAndDisplay(currentSheet, val);
   }
 });
 </script>
-
 </body>
 </html>
