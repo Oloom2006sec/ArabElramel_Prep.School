@@ -2,54 +2,110 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>أخبار المدرسة</title>
+  <title>الأخبار - مدرسة عرب الرمل الإعدادية</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
-      padding-top: 60px;
+      font-family: 'Cairo', sans-serif;
+      margin: 0;
+      padding-top: 90px;
+      background: linear-gradient(135deg, #fceabb, #f8b500);
+      color: #333;
+      min-height: 100vh;
+    }
+
+    .navbar {
+      background: linear-gradient(to left, #4e54c8, #8f94fb);
+    }
+
+    .navbar-brand, .nav-link {
+      color: white !important;
+      font-weight: bold;
+    }
+
+    .news-ticker {
+      background-color: #ffc107;
+      color: #000;
+      padding: 8px 0;
+      font-weight: bold;
+      font-size: 1rem;
+    }
+
+    .news-ticker marquee {
       direction: rtl;
-      text-align: right;
+    }
+
+    .news-card {
+      background: white;
+      padding: 1rem 1.5rem;
+      margin-bottom: 1rem;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+
+    .news-card:hover {
+      transform: scale(1.02);
+    }
+
+    footer {
+      background: #343a40;
+      color: white;
+      padding: 1rem;
+      margin-top: 50px;
     }
   </style>
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
-  <div class="container">
-    <a class="navbar-brand" href="#">مدرسة عرب الرمل الاعدادية المشتركة</a>
-    <div>
-      <ul class="navbar-nav">
-        <li class="nav-item"><a class="nav-link" href="index.html">الرئيسية</a></li>
-        <li class="nav-item"><a class="nav-link active" href="news.html">الأخبار</a></li>
-        <li class="nav-item"><a class="nav-link" href="results.html">النتائج</a></li>
-        <li class="nav-item"><a class="nav-link" href="contact.html">تواصل معنا</a></li>
-      </ul>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">📚 مدرسة عرب الرمل</a>
+      <div class="collapse navbar-collapse justify-content-end">
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="index.html">الرئيسية</a></li>
+          <li class="nav-item"><a class="nav-link active" href="news.html">الأخبار</a></li>
+          <li class="nav-item"><a class="nav-link" href="results.html">النتائج</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html">تواصل معنا</a></li>
+        </ul>
+      </div>
     </div>
-  </div>
-</nav>
+  </nav>
 
-<div class="container mt-5">
-  <h1 class="mb-4">أحدث الأخبار</h1>
-
-  <div class="card mb-3">
-    <div class="card-body">
-      <h5 class="card-title">📅 بدء الامتحانات النهائية</h5>
-      <p class="card-text">تبدأ الامتحانات النهائية للصفوف الابتدائية والإعدادية في 1 يونيو 2025.</p>
-    </div>
+  <!-- شريط الأخبار -->
+  <div class="news-ticker">
+    <marquee behavior="scroll" scrollamount="5" onmouseover="this.stop();" onmouseout="this.start();">
+      📢 إعلان هام: بدء امتحانات نهاية العام يوم 1 يونيو | 🚌 رحلة مدرسية إلى مكتبة الإسكندرية 10 يونيو | 📞 للتواصل مع الإدارة يرجى زيارة صفحة تواصل معنا.
+    </marquee>
   </div>
 
-  <div class="card mb-3">
-    <div class="card-body">
-      <h5 class="card-title">📚 رحلة مدرسية</h5>
-      <p class="card-text">تنظم المدرسة رحلة علمية إلى مكتبة الإسكندرية يوم 10 يونيو 2025.</p>
+  <!-- الأخبار -->
+  <div class="container mt-4">
+    <h2 class="mb-4 text-center">📰 أحدث الأخبار</h2>
+    
+    <div class="news-card">
+      <h5>بدء امتحانات نهاية العام</h5>
+      <p>ستنطلق امتحانات نهاية العام الدراسي في 1 يونيو 2025، نتمنى لجميع الطلاب التوفيق والنجاح.</p>
+    </div>
+
+    <div class="news-card">
+      <h5>رحلة إلى مكتبة الإسكندرية</h5>
+      <p>تنظم المدرسة رحلة ثقافية يوم 10 يونيو إلى مكتبة الإسكندرية، على الطلاب الراغبين بالتسجيل التوجه للمسؤولين.</p>
+    </div>
+
+    <div class="news-card">
+      <h5>تهنئة للطلاب المتفوقين</h5>
+      <p>تهنئ إدارة المدرسة الطلاب المتفوقين وتتمنى لهم دوام النجاح والتفوق.</p>
     </div>
   </div>
-</div>
 
-<footer class="bg-dark text-white text-center p-3 mt-5">
-  &copy; 2025 مدرسة عرب الرمل الاعدادية المشتركة. جميع الحقوق محفوظة.
-</footer>
+  <!-- Footer -->
+  <footer class="text-center">
+    &copy; 2025 مدرسة عرب الرمل الاعدادية المشتركة. جميع الحقوق محفوظة.
+  </footer>
 
 </body>
 </html>
