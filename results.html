@@ -14,7 +14,7 @@
 
 <div class="container">
   <h1 class="text-center mb-4">📊 نتائج الطلاب</h1>
-  
+
   <ul class="nav nav-tabs mb-3" id="gradeTabs">
     <li class="nav-item">
       <a class="nav-link active" data-grade="Sheet1" href="#">الصف الأول الإعدادي</a>
@@ -29,8 +29,9 @@
 
   <div class="mb-3">
     <input type="text" id="searchInput" class="form-control" placeholder="اكتب رقم الجلوس">
+    <button id="searchBtn" class="btn btn-primary mt-2 w-100">عرض النتيجة</button>
   </div>
-  
+
   <div id="resultArea"></div>
 </div>
 
@@ -44,7 +45,7 @@ function fetchAndDisplay(sheetName, seatNumber = '') {
     .then(data => {
       const area = document.getElementById('resultArea');
       area.innerHTML = '';
-      const filtered = seatNumber ? data.filter(row => String(row['رقم الجلوس']).trim() === seatNumber) : data;
+      const filtered = seatNumber ? data.filter(row => String(row['رقم الجلوس']).trim() === seatNumber) : [];
 
       if (filtered.length === 0) {
         area.innerHTML = `<div class='alert alert-warning'>لا توجد نتائج بهذا الرقم.</div>`;
@@ -66,8 +67,8 @@ function fetchAndDisplay(sheetName, seatNumber = '') {
     });
 }
 
-// Initial load
-fetchAndDisplay(currentSheet);
+// Initial load with no results
+fetch(sheetBaseURL + currentSheet); // Just pre-warm the call
 
 // Tab click handler
 const tabs = document.querySelectorAll('[data-grade]');
@@ -77,15 +78,17 @@ tabs.forEach(tab => {
     tabs.forEach(t => t.classList.remove('active'));
     tab.classList.add('active');
     currentSheet = tab.getAttribute('data-grade');
-    fetchAndDisplay(currentSheet, document.getElementById('searchInput').value.trim());
+    document.getElementById('resultArea').innerHTML = '';
   });
 });
 
-// Search input handler
-const input = document.getElementById('searchInput');
-input.addEventListener('input', () => {
-  const value = input.value.trim();
-  fetchAndDisplay(currentSheet, value);
+// Search button handler
+const btn = document.getElementById('searchBtn');
+btn.addEventListener('click', () => {
+  const value = document.getElementById('searchInput').value.trim();
+  if (value !== '') {
+    fetchAndDisplay(currentSheet, value);
+  }
 });
 </script>
 
