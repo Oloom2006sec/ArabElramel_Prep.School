@@ -151,7 +151,7 @@ function fetchData(sheetName, forceRefresh = false) {
 
   if (!forceRefresh) {
     const cached = getCachedData(sheetName);
-    if (cached) {
+    if (cached && Array.isArray(cached) && cached.length > 0) {
       document.getElementById('loadingSpinner').style.display = 'none';
       return Promise.resolve(cached);
     }
@@ -160,15 +160,25 @@ function fetchData(sheetName, forceRefresh = false) {
   return fetch(sheetBaseURL + sheetName)
     .then(res => res.json())
     .then(data => {
-      saveToCache(sheetName, data);
-      document.getElementById('loadingSpinner').style.display = 'none';
-      return data;
+      if (Array.isArray(data) && data.length > 0) {
+        saveToCache(sheetName, data);
+        return data;
+      } else {
+        localStorage.removeItem(sheetName);
+        throw new Error("بيانات غير متوفرة أو فارغة.");
+      }
     })
     .catch(err => {
+      console.error(err);
+      alert("⚠️ حدث خطأ أثناء تحميل البيانات. سيتم إعادة المحاولة لاحقًا.");
       document.getElementById('loadingSpinner').style.display = 'none';
-      alert("حدث خطأ أثناء تحميل البيانات. تأكد من الاتصال بالإنترنت.");
+      return [];
+    })
+    .finally(() => {
+      document.getElementById('loadingSpinner').style.display = 'none';
     });
 }
+
 
 function showResult(seatNumber) {
   fetchData(currentSheet).then(data => {
