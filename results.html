@@ -345,12 +345,11 @@
   });
 
   // زر البحث
-  document.getElementById('searchInput').addEventListener('keyup', (e) => {
-  if (e.key === 'Enter') {
-    document.getElementById('searchBtn').click();
-  }
-});
-
+  document.getElementById('searchBtn').addEventListener('click', () => {
+    const val = document.getElementById('searchInput').value.trim();
+    if (val) {
+      fetchAndDisplay(currentSheet, val);
+    }
 </script>
 
 </body>
