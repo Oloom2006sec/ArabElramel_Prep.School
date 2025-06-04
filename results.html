@@ -224,21 +224,50 @@
 <script>
 const sheetBaseURL = 'https://opensheet.elk.sh/1frIMSVyieY1niglJr3dSBWjCCBiPV8H1E0ZXxCC2aKQ/';
 let currentSheet = 'أولى';
-const cache = {}; // تخزين البيانات حسب الصف
+const cache = {}; // ذاكرة مؤقتة
+const localStorageKeyPrefix = 'arab_raml_results_';
 
-function fetchAndCache(sheetName) {
-  // لو البيانات موجودة في الكاش، نستخدمها فورًا
-  if (cache[sheetName]) return Promise.resolve(cache[sheetName]);
+// تحميل من التخزين المحلي أولاً
+function loadFromLocalStorage(sheetName) {
+  const data = localStorage.getItem(localStorageKeyPrefix + sheetName);
+  if (data) {
+    try {
+      return JSON.parse(data);
+    } catch (e) {
+      console.error("Local storage parse error", e);
+    }
+  }
+  return null;
+}
 
-  // وإلا، نجيبها من الإنترنت ونخزنها
+// حفظ في التخزين المحلي
+function saveToLocalStorage(sheetName, data) {
+  localStorage.setItem(localStorageKeyPrefix + sheetName, JSON.stringify(data));
+}
+
+// تحميل البيانات من الشبكة أو التخزين
+function fetchAndCache(sheetName, forceUpdate = false) {
+  const area = document.getElementById('resultArea');
+  area.innerHTML = `<div class='alert alert-info'>⏳ جاري تحميل البيانات...</div>`;
+
+  if (!forceUpdate) {
+    const stored = loadFromLocalStorage(sheetName);
+    if (stored) {
+      cache[sheetName] = stored;
+      return Promise.resolve(stored);
+    }
+  }
+
   return fetch(sheetBaseURL + sheetName)
     .then(res => res.json())
     .then(data => {
       cache[sheetName] = data;
+      saveToLocalStorage(sheetName, data);
       return data;
     });
 }
 
+// عرض النتيجة
 function showResult(seatNumber) {
   fetchAndCache(currentSheet).then(data => {
     const area = document.getElementById('resultArea');
@@ -246,7 +275,7 @@ function showResult(seatNumber) {
 
     const filtered = data.filter(row => String(row['رقم الجلوس']).trim() === seatNumber);
     if (filtered.length === 0) {
-      area.innerHTML = `<div class='alert alert-warning'>لا توجد نتائج بهذا الرقم.</div>`;
+      area.innerHTML = `<div class='alert alert-warning'>🚫 لا توجد نتائج بهذا الرقم.</div>`;
       return;
     }
 
@@ -259,13 +288,38 @@ function showResult(seatNumber) {
           result += `<li class="list-group-item">${key}: ${row[key]}</li>`;
         }
       }
-      result += '</ul></div></div>';
+
+      result += '</ul>';
+      result += `<div class="mt-3 d-flex justify-content-between">
+        <button class="btn btn-success" onclick="window.print()">🖨️ طباعة</button>
+        <button class="btn btn-secondary" onclick="shareResult('${row['الاسم']}', '${row['رقم الجلوس']}')">🔗 مشاركة</button>
+      </div>`;
+      result += '</div></div>';
       area.innerHTML += result;
     });
   });
 }
 
-// Tab click handler
+// المشاركة
+function shareResult(name, seatNumber) {
+  const url = window.location.href;
+  const shareText = `نتيجة الطالب/ـة ${name} رقم الجلوس ${seatNumber}\n${url}`;
+  if (navigator.share) {
+    navigator.share({ title: "نتيجتك", text: shareText, url });
+  } else {
+    prompt("انسخ الرابط وشاركه:", url);
+  }
+}
+
+// زر تحديث البيانات
+document.getElementById('refreshBtn').addEventListener('click', () => {
+  localStorage.removeItem(localStorageKeyPrefix + currentSheet);
+  fetchAndCache(currentSheet, true).then(() => {
+    document.getElementById('resultArea').innerHTML = `<div class='alert alert-success'>✅ تم تحديث البيانات بنجاح.</div>`;
+  });
+});
+
+// تبويب الصفوف
 const tabs = document.querySelectorAll('[data-grade]');
 tabs.forEach(tab => {
   tab.addEventListener('click', (e) => {
@@ -277,7 +331,7 @@ tabs.forEach(tab => {
   });
 });
 
-// Search button handler
+// زر البحث
 document.getElementById('searchBtn').addEventListener('click', () => {
   const value = document.getElementById('searchInput').value.trim();
   if (value !== '') {
@@ -285,6 +339,7 @@ document.getElementById('searchBtn').addEventListener('click', () => {
   }
 });
 </script>
+
 
 
 </body>
