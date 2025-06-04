@@ -184,7 +184,14 @@ function showResult(seatNumber) {
   fetchData(currentSheet).then(data => {
     const area = document.getElementById('resultArea');
     area.innerHTML = '';
-    const filtered = data.filter(row => String(row['رقم الجلوس']).trim() === seatNumber);
+    if (!Array.isArray(data)) {
+  alert("⚠️ حدث خطأ أثناء تحميل البيانات. يرجى تحديث الصفحة أو الضغط على زر تحديث البيانات.");
+  console.error("البيانات المسترجعة ليست مصفوفة:", data);
+  return;
+}
+
+const filtered = data.filter(row => row["رقم الجلوس"] === seatNumber);
+
     if (filtered.length === 0) {
       area.innerHTML = `<div class='alert alert-warning'>لا توجد نتائج بهذا الرقم.</div>`;
       return;
