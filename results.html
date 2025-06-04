@@ -55,6 +55,7 @@
 
   <div class="mb-3">
     <input type="text" id="searchInput" class="form-control" placeholder="اكتب رقم الجلوس" />
+    <input type="text" id="codeInput" class="form-control mt-3" placeholder="اكتب الكود السري" />
     <button id="searchBtn" class="btn btn-primary mt-2 w-100">عرض النتيجة</button>
   </div>
 
@@ -74,116 +75,119 @@
 </div>
 
 <script>
-const sheetBaseURL = 'https://opensheet.elk.sh/1y7NekqhM3tJ8FCQFiBKtJpOwtJrfY13rtiWF6M-Ttcg/';
-let currentSheet = 'أولى';
+  const sheetBaseURL = 'https://opensheet.elk.sh/1y7NekqhM3tJ8FCQFiBKtJpOwtJrfY13rtiWF6M-Ttcg/';
+  let currentSheet = 'أولى';
 
-const resultArea = document.getElementById('resultArea');
-const loadingSpinner = document.getElementById('loadingSpinner');
-const printBtn = document.getElementById('printBtn');
-const shareBtn = document.getElementById('shareBtn');
+  const resultArea = document.getElementById('resultArea');
+  const loadingSpinner = document.getElementById('loadingSpinner');
+  const printBtn = document.getElementById('printBtn');
+  const shareBtn = document.getElementById('shareBtn');
 
-function showLoading(show) {
-  loadingSpinner.style.display = show ? 'flex' : 'none';
-}
+  function showLoading(show) {
+    loadingSpinner.style.display = show ? 'flex' : 'none';
+  }
 
-function formatResultCard(row) {
-  let result = `<div class="result-card" id="resultCard"><h5>${row['الاسم'] || 'بدون اسم'} - رقم الجلوس ${row['رقم الجلوس'] || 'غير محدد'}</h5><ul class="list-group list-group-flush mt-3">`;
-  for (let key in row) {
-    if (key !== 'الاسم' && key !== 'رقم الجلوس') {
-      result += `<li class="list-group-item"><strong>${key}:</strong> ${row[key]}</li>`;
+  function formatResultCard(row) {
+    let result = `<div class="result-card" id="resultCard"><h5>${row['الاسم'] || 'بدون اسم'} - رقم الجلوس ${row['رقم الجلوس'] || 'غير محدد'}</h5><ul>`;
+    for (let key in row) {
+      if (key !== 'الاسم' && key !== 'رقم الجلوس' && key !== 'الكود السري') {
+        result += `<li><strong>${key}:</strong> ${row[key]}</li>`;
+      }
     }
+    result += '</ul></div>';
+    return result;
   }
-  result += '</ul></div>';
-  return result;
-}
 
-async function fetchAndDisplay(sheetName, seatNumber = '') {
-  showLoading(true);
-  resultArea.innerHTML = '';
-  printBtn.disabled = true;
-  shareBtn.disabled = true;
-
-  try {
-    const res = await fetch(sheetBaseURL + sheetName);
-    const data = await res.json();
-
-    const filtered = seatNumber ? data.filter(row => String(row['رقم الجلوس']).trim() === seatNumber) : [];
-
-    if (filtered.length === 0) {
-      resultArea.innerHTML = `<div class='alert alert-warning'>لا توجد نتائج بهذا الرقم.</div>`;
-    } else {
-      filtered.forEach(row => {
-        resultArea.innerHTML += formatResultCard(row);
-      });
-      printBtn.disabled = false;
-      shareBtn.disabled = false;
-    }
-  } catch (error) {
-    resultArea.innerHTML = `<div class='alert alert-danger'>حدث خطأ أثناء تحميل البيانات.</div>`;
-  } finally {
-    showLoading(false);
-  }
-}
-
-// طباعة النتيجة
-printBtn.addEventListener('click', () => {
-  const printContents = document.getElementById('resultCard');
-  if (printContents) {
-    const originalContents = document.body.innerHTML;
-    document.body.innerHTML = printContents.outerHTML;
-    window.print();
-    document.body.innerHTML = originalContents;
-    window.location.reload();
-  }
-});
-
-// مشاركة النتيجة (واتساب، تويتر، فيسبوك)
-shareBtn.addEventListener('click', () => {
-  const card = document.getElementById('resultCard');
-  if (!card) return alert('لا توجد نتيجة للمشاركة.');
-
-  const name = card.querySelector('h5').innerText;
-  let details = '';
-  card.querySelectorAll('li').forEach(li => {
-    details += `${li.innerText}\n`;
-  });
-
-  const text = encodeURIComponent(`${name}\n${details}\nنتيجة مدرسة عرب الرمل الإعدادية`);
-  const whatsappURL = `https://wa.me/?text=${text}`;
-  const twitterURL = `https://twitter.com/intent/tweet?text=${text}`;
-  const facebookURL = `https://www.facebook.com/sharer/sharer.php?u=&quote=${text}`;
-
-  const shareWindow = window.open('', '_blank', 'width=600,height=400');
-  shareWindow.document.write(`
-    <h4>مشاركة النتيجة عبر:</h4>
-    <ul>
-      <li><a href="${whatsappURL}" target="_blank">واتساب</a></li>
-      <li><a href="${twitterURL}" target="_blank">تويتر</a></li>
-      <li><a href="${facebookURL}" target="_blank">فيسبوك</a></li>
-    </ul>
-  `);
-});
-
-// تبويب الصفوف
-document.querySelectorAll('[data-grade]').forEach(tab => {
-  tab.addEventListener('click', (e) => {
-    e.preventDefault();
-    document.querySelectorAll('[data-grade]').forEach(t => t.classList.remove('active'));
-    tab.classList.add('active');
-    currentSheet = tab.getAttribute('data-grade');
+  async function fetchAndDisplay(sheetName, seatNumber = '', secretCode = '') {
+    showLoading(true);
     resultArea.innerHTML = '';
     printBtn.disabled = true;
     shareBtn.disabled = true;
-  });
-});
 
-// زر البحث
-document.getElementById('searchBtn').addEventListener('click', () => {
-  const val = document.getElementById('searchInput').value.trim();
-  if (val) {
-    fetchAndDisplay(currentSheet, val);
+    try {
+      const res = await fetch(sheetBaseURL + sheetName);
+      const data = await res.json();
+
+      const filtered = data.filter(row =>
+        String(row['رقم الجلوس']).trim() === seatNumber &&
+        String(row['الكود السري']).trim() === secretCode
+      );
+
+      if (filtered.length === 0) {
+        resultArea.innerHTML = `<div class='alert alert-warning text-dark'>رقم الجلوس أو الكود السري غير صحيح.</div>`;
+      } else {
+        filtered.forEach(row => {
+          resultArea.innerHTML += formatResultCard(row);
+        });
+        printBtn.disabled = false;
+        shareBtn.disabled = false;
+      }
+    } catch (error) {
+      resultArea.innerHTML = `<div class='alert alert-danger text-dark'>حدث خطأ أثناء تحميل البيانات.</div>`;
+    } finally {
+      showLoading(false);
+    }
   }
-});
+
+  printBtn.addEventListener('click', () => {
+    const printContents = document.getElementById('resultCard');
+    if (printContents) {
+      const originalContents = document.body.innerHTML;
+      document.body.innerHTML = printContents.outerHTML;
+      window.print();
+      document.body.innerHTML = originalContents;
+      window.location.reload();
+    }
+  });
+
+  shareBtn.addEventListener('click', () => {
+    const card = document.getElementById('resultCard');
+    if (!card) return alert('لا توجد نتيجة للمشاركة.');
+
+    const name = card.querySelector('h5').innerText;
+    let details = '';
+    card.querySelectorAll('li').forEach(li => {
+      details += `${li.innerText}\n`;
+    });
+
+    const text = encodeURIComponent(`${name}\n${details}\nنتيجة مدرسة عرب الرمل الإعدادية`);
+    const whatsappURL = `https://wa.me/?text=${text}`;
+    const twitterURL = `https://twitter.com/intent/tweet?text=${text}`;
+    const facebookURL = `https://www.facebook.com/sharer/sharer.php?u=&quote=${text}`;
+
+    const shareWindow = window.open('', '_blank', 'width=600,height=400');
+    shareWindow.document.write(`
+      <h4 style="font-family: 'Cairo', sans-serif; color:#764ba2;">مشاركة النتيجة عبر:</h4>
+      <ul style="font-family: 'Cairo', sans-serif; list-style:none; padding-left:0;">
+        <li><a href="${whatsappURL}" target="_blank" style="color:#25D366; text-decoration:none; font-weight:bold;">واتساب</a></li>
+        <li><a href="${twitterURL}" target="_blank" style="color:#1DA1F2; text-decoration:none; font-weight:bold;">تويتر</a></li>
+        <li><a href="${facebookURL}" target="_blank" style="color:#1877F2; text-decoration:none; font-weight:bold;">فيسبوك</a></li>
+      </ul>
+    `);
+  });
+
+  document.querySelectorAll('[data-grade]').forEach(tab => {
+    tab.addEventListener('click', (e) => {
+      e.preventDefault();
+      document.querySelectorAll('[data-grade]').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      currentSheet = tab.getAttribute('data-grade');
+      resultArea.innerHTML = '';
+      printBtn.disabled = true;
+      shareBtn.disabled = true;
+    });
+  });
+
+  document.getElementById('searchBtn').addEventListener('click', () => {
+    const seatNumber = document.getElementById('searchInput').value.trim();
+    const secretCode = document.getElementById('codeInput').value.trim();
+    if (seatNumber && secretCode) {
+      fetchAndDisplay(currentSheet, seatNumber, secretCode);
+    } else {
+      resultArea.innerHTML = `<div class='alert alert-info text-dark'>من فضلك أدخل رقم الجلوس والكود السري.</div>`;
+    }
+  });
 </script>
+
 </body>
 </html>
