@@ -222,136 +222,70 @@
 </div>
 
 <script>
-  const sheetBaseURL = 'https://opensheet.elk.sh/1y7NekqhM3tJ8FCQFiBKtJpOwtJrfY13rtiWF6M-Ttcg/';
-  let currentSheet = 'أولى';
+const sheetBaseURL = 'https://opensheet.elk.sh/1frIMSVyieY1niglJr3dSBWjCCBiPV8H1E0ZXxCC2aKQ/';
+let currentSheet = 'أولى';
+const cache = {}; // تخزين البيانات حسب الصف
 
-  const resultArea = document.getElementById('resultArea');
-  const loadingSpinner = document.getElementById('loadingSpinner');
-  const printBtn = document.getElementById('printBtn');
-  const shareBtn = document.getElementById('shareBtn');
+function fetchAndCache(sheetName) {
+  // لو البيانات موجودة في الكاش، نستخدمها فورًا
+  if (cache[sheetName]) return Promise.resolve(cache[sheetName]);
 
-  // تغيير ألوان أزرار البحث حسب ثيم الصفحة
-  const searchBtn = document.getElementById('searchBtn');
-  searchBtn.style.backgroundColor = '#ff6a00';
-  searchBtn.style.color = '#fff';
-  searchBtn.style.border = 'none';
-  searchBtn.style.fontWeight = '700';
-  searchBtn.style.fontSize = '1.1rem';
-  searchBtn.style.borderRadius = '50px';
-  searchBtn.style.boxShadow = '0 4px 20px #ff6a00cc';
-  searchBtn.style.transition = 'background 0.3s ease, box-shadow 0.3s ease';
-  searchBtn.onmouseover = () => {
-    searchBtn.style.backgroundColor = '#e65c00';
-    searchBtn.style.boxShadow = '0 6px 20px #e65c00cc';
-  };
-  searchBtn.onmouseout = () => {
-    searchBtn.style.backgroundColor = '#ff6a00';
-    searchBtn.style.boxShadow = '0 4px 20px #ff6a00cc';
-  };
-
-  function showLoading(show) {
-    loadingSpinner.style.display = show ? 'flex' : 'none';
-  }
-
-  function formatResultCard(row) {
-    let result = `<div class="result-card" id="resultCard"><h5>${row['الاسم'] || 'بدون اسم'} - رقم الجلوس ${row['رقم الجلوس'] || 'غير محدد'}</h5><ul>`;
-    for (let key in row) {
-      if (key !== 'الاسم' && key !== 'رقم الجلوس') {
-        result += `<li><strong>${key}:</strong> ${row[key]}</li>`;
-      }
-    }
-    result += '</ul></div>';
-    return result;
-  }
-
-  async function fetchAndDisplay(sheetName, seatNumber = '') {
-    showLoading(true);
-    resultArea.innerHTML = '';
-    printBtn.disabled = true;
-    shareBtn.disabled = true;
-
-    try {
-      const res = await fetch(sheetBaseURL + sheetName);
-      const data = await res.json();
-
-      const filtered = seatNumber ? data.filter(row => String(row['رقم الجلوس']).trim() === seatNumber) : [];
-
-      if (filtered.length === 0) {
-        resultArea.innerHTML = `<div class='alert alert-warning text-dark'>لا توجد نتائج بهذا الرقم.</div>`;
-      } else {
-        filtered.forEach(row => {
-          resultArea.innerHTML += formatResultCard(row);
-        });
-        printBtn.disabled = false;
-        shareBtn.disabled = false;
-      }
-    } catch (error) {
-      resultArea.innerHTML = `<div class='alert alert-danger text-dark'>حدث خطأ أثناء تحميل البيانات.</div>`;
-    } finally {
-      showLoading(false);
-    }
-  }
-
-  // طباعة النتيجة
-  printBtn.addEventListener('click', () => {
-    const printContents = document.getElementById('resultCard');
-    if (printContents) {
-      const originalContents = document.body.innerHTML;
-      document.body.innerHTML = printContents.outerHTML;
-      window.print();
-      document.body.innerHTML = originalContents;
-      window.location.reload();
-    }
-  });
-
-  // مشاركة النتيجة (واتساب، تويتر، فيسبوك)
-  shareBtn.addEventListener('click', () => {
-    const card = document.getElementById('resultCard');
-    if (!card) return alert('لا توجد نتيجة للمشاركة.');
-
-    const name = card.querySelector('h5').innerText;
-    let details = '';
-    card.querySelectorAll('li').forEach(li => {
-      details += `${li.innerText}\n`;
+  // وإلا، نجيبها من الإنترنت ونخزنها
+  return fetch(sheetBaseURL + sheetName)
+    .then(res => res.json())
+    .then(data => {
+      cache[sheetName] = data;
+      return data;
     });
+}
 
-    const text = encodeURIComponent(`${name}\n${details}\nنتيجة مدرسة عرب الرمل الإعدادية`);
-    const whatsappURL = `https://wa.me/?text=${text}`;
-    const twitterURL = `https://twitter.com/intent/tweet?text=${text}`;
-    const facebookURL = `https://www.facebook.com/sharer/sharer.php?u=&quote=${text}`;
+function showResult(seatNumber) {
+  fetchAndCache(currentSheet).then(data => {
+    const area = document.getElementById('resultArea');
+    area.innerHTML = '';
 
-    const shareWindow = window.open('', '_blank', 'width=600,height=400');
-    shareWindow.document.write(`
-      <h4 style="font-family: 'Cairo', sans-serif; color:#764ba2;">مشاركة النتيجة عبر:</h4>
-      <ul style="font-family: 'Cairo', sans-serif; list-style:none; padding-left:0;">
-        <li><a href="${whatsappURL}" target="_blank" style="color:#25D366; text-decoration:none; font-weight:bold;">واتساب</a></li>
-        <li><a href="${twitterURL}" target="_blank" style="color:#1DA1F2; text-decoration:none; font-weight:bold;">تويتر</a></li>
-        <li><a href="${facebookURL}" target="_blank" style="color:#1877F2; text-decoration:none; font-weight:bold;">فيسبوك</a></li>
-      </ul>
-    `);
-  });
+    const filtered = data.filter(row => String(row['رقم الجلوس']).trim() === seatNumber);
+    if (filtered.length === 0) {
+      area.innerHTML = `<div class='alert alert-warning'>لا توجد نتائج بهذا الرقم.</div>`;
+      return;
+    }
 
-  // تبويب الصفوف
-  document.querySelectorAll('[data-grade]').forEach(tab => {
-    tab.addEventListener('click', (e) => {
-      e.preventDefault();
-      document.querySelectorAll('[data-grade]').forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      currentSheet = tab.getAttribute('data-grade');
-      resultArea.innerHTML = '';
-      printBtn.disabled = true;
-      shareBtn.disabled = true;
+    filtered.forEach(row => {
+      let result = '<div class="card result-card"><div class="card-body">';
+      result += `<h5 class="card-title">${row['الاسم'] || 'بدون اسم'} - رقم الجلوس ${row['رقم الجلوس'] || 'غير محدد'}</h5><ul class="list-group list-group-flush">`;
+
+      for (let key in row) {
+        if (key !== 'الاسم' && key !== 'رقم الجلوس') {
+          result += `<li class="list-group-item">${key}: ${row[key]}</li>`;
+        }
+      }
+      result += '</ul></div></div>';
+      area.innerHTML += result;
     });
   });
+}
 
-  // زر البحث
-  document.getElementById('searchBtn').addEventListener('click', () => {
-    const val = document.getElementById('searchInput').value.trim();
-    if (val) {
-      fetchAndDisplay(currentSheet, val);
-    }
+// Tab click handler
+const tabs = document.querySelectorAll('[data-grade]');
+tabs.forEach(tab => {
+  tab.addEventListener('click', (e) => {
+    e.preventDefault();
+    tabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    currentSheet = tab.getAttribute('data-grade');
+    document.getElementById('resultArea').innerHTML = '';
   });
+});
+
+// Search button handler
+document.getElementById('searchBtn').addEventListener('click', () => {
+  const value = document.getElementById('searchInput').value.trim();
+  if (value !== '') {
+    showResult(value);
+  }
+});
 </script>
+
 
 </body>
 </html>
