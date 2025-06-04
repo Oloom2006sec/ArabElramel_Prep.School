@@ -7,7 +7,6 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Cairo&display=swap" rel="stylesheet" />
   <style>
-    /* عام */
     body {
       font-family: 'Cairo', sans-serif;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -16,17 +15,13 @@
       display: flex;
       flex-direction: column;
       padding: 30px 15px;
-      transition: background 0.5s ease;
     }
     h1 {
       font-weight: 900;
       font-size: 2.5rem;
       margin-bottom: 1rem;
       text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
-      user-select: none;
     }
-
-    /* التبويبات */
     .nav-tabs .nav-link {
       color: #e1e1e1;
       font-weight: 700;
@@ -37,55 +32,43 @@
       padding: 10px 25px;
       background: rgba(255 255 255 / 0.15);
       transition: all 0.3s ease;
-      cursor: pointer;
-      user-select: none;
     }
     .nav-tabs .nav-link.active {
       background: #fff;
       color: #764ba2;
-      box-shadow: 0 5px 15px rgba(118, 75, 162, 0.4);
-      font-size: 1.15rem;
     }
     .nav-tabs {
       justify-content: center;
       margin-bottom: 2rem;
     }
-
-    /* مدخل البحث */
     #searchInput {
-      border-radius: 50px !important;
-      padding: 12px 25px !important;
+      border-radius: 50px;
+      padding: 12px 25px;
       font-size: 1.1rem;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      transition: box-shadow 0.3s ease;
     }
-    #searchInput:focus {
-      box-shadow: 0 0 15px #fff;
-      outline: none;
-    }
-    #searchBtn {
+    #searchBtn, #refreshBtn {
       border-radius: 50px;
       font-weight: 700;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       padding: 12px;
+      margin-top: 10px;
+      width: 100%;
+    }
+    #searchBtn {
       background: #ff6a00;
       border: none;
-      box-shadow: 0 4px 15px #ff6a00cc;
-      transition: background 0.3s ease, box-shadow 0.3s ease;
+      color: white;
     }
-    #searchBtn:hover {
-      background: #e65c00;
-      box-shadow: 0 6px 20px #e65c00cc;
+    #refreshBtn {
+      background: #17a2b8;
+      border: none;
+      color: white;
     }
-
-    /* شريط التحميل */
     #loadingSpinner {
       display: none;
       justify-content: center;
       margin: 25px 0;
     }
-
-    /* بطاقة النتيجة */
     .result-card {
       background: #fff;
       color: #333;
@@ -94,36 +77,11 @@
       box-shadow: 0 6px 25px rgba(0,0,0,0.2);
       max-width: 600px;
       margin: 0 auto 30px;
-      position: relative;
-      overflow: hidden;
-      animation: fadeInUp 0.7s ease forwards;
     }
-    .result-card h5 {
-      font-weight: 900;
-      font-size: 1.5rem;
-      margin-bottom: 15px;
-      color: #764ba2;
-    }
-    .result-card ul {
-      list-style: none;
-      padding-left: 0;
-    }
-    .result-card ul li {
-      padding: 10px 15px;
-      border-bottom: 1px solid #eee;
-      font-size: 1.1rem;
-      color: #555;
-    }
-    .result-card ul li:last-child {
-      border-bottom: none;
-    }
-
-    /* أزرار تحت النتيجة */
     .btn-group-custom {
       display: flex;
       justify-content: center;
       gap: 15px;
-      margin-bottom: 40px;
       flex-wrap: wrap;
     }
     .btn-group-custom button, .btn-group-custom a {
@@ -132,55 +90,6 @@
       font-size: 1.1rem;
       border-radius: 50px;
       padding: 12px 0;
-      transition: all 0.3s ease;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-    }
-    .btn-group-custom button:disabled {
-      background: #aaa !important;
-      box-shadow: none !important;
-      cursor: not-allowed;
-    }
-    #printBtn {
-      background: #4caf50;
-      color: white;
-      border: none;
-    }
-    #printBtn:hover:not(:disabled) {
-      background: #45a049;
-      box-shadow: 0 8px 20px #45a049cc;
-    }
-    #shareBtn {
-      background: #2196f3;
-      color: white;
-      border: none;
-    }
-    #shareBtn:hover:not(:disabled) {
-      background: #1976d2;
-      box-shadow: 0 8px 20px #1976d2cc;
-    }
-    .btn-group-custom a {
-      background: #555;
-      color: white;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .btn-group-custom a:hover {
-      background: #444;
-      text-decoration: none;
-    }
-
-    /* تأثير التحميل */
-    @keyframes fadeInUp {
-      0% {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
     }
   </style>
 </head>
@@ -190,167 +99,119 @@
   <h1>📊 نتائج الطلاب</h1>
 
   <ul class="nav nav-tabs" id="gradeTabs">
-    <li class="nav-item">
-      <a class="nav-link active" data-grade="أولى" href="#">الصف الأول الإعدادي</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" data-grade="ثانية" href="#">الصف الثاني الإعدادي</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" data-grade="ثالثة" href="#">الصف الثالث الإعدادي</a>
-    </li>
+    <li class="nav-item"><a class="nav-link active" data-grade="أولى" href="#">الصف الأول الإعدادي</a></li>
+    <li class="nav-item"><a class="nav-link" data-grade="ثانية" href="#">الصف الثاني الإعدادي</a></li>
+    <li class="nav-item"><a class="nav-link" data-grade="ثالثة" href="#">الصف الثالث الإعدادي</a></li>
   </ul>
 
-  <div class="mb-3 mt-4" style="max-width: 350px; margin-left: auto; margin-right: auto;">
+  <div style="max-width: 400px; margin: 0 auto;">
     <input type="text" id="searchInput" class="form-control" placeholder="اكتب رقم الجلوس" />
-    <button id="searchBtn" class="btn mt-3 w-100">عرض النتيجة</button>
+    <button id="searchBtn" class="btn">عرض النتيجة</button>
+    <button id="refreshBtn" class="btn">🔄 تحديث البيانات</button>
   </div>
 
-  <div id="loadingSpinner" class="d-flex justify-content-center">
-    <div class="spinner-border text-light" role="status">
-      <span class="visually-hidden">جارٍ التحميل...</span>
-    </div>
+  <div id="loadingSpinner" class="d-flex">
+    <div class="spinner-border text-light" role="status"><span class="visually-hidden">جارٍ التحميل...</span></div>
   </div>
 
   <div id="resultArea"></div>
 
   <div class="btn-group-custom">
-    <button id="printBtn" disabled>🖨️ طباعة النتيجة</button>
-    <button id="shareBtn" disabled>📤 مشاركة النتيجة</button>
-    <a href="index.html">🏠 الصفحة الرئيسية</a>
+    <a href="index.html" class="btn btn-dark">🏠 الصفحة الرئيسية</a>
   </div>
 </div>
 
 <script>
-  const sheetBaseURL = 'https://opensheet.elk.sh/1y7NekqhM3tJ8FCQFiBKtJpOwtJrfY13rtiWF6M-Ttcg/';
-  let currentSheet = 'أولى';
+const sheetBaseURL = 'https://opensheet.elk.sh/1frIMSVyieY1niglJr3dSBWjCCBiPV8H1E0ZXxCC2aKQ/';
+let currentSheet = 'أولى';
+const EXPIRATION_MINUTES = 30;
 
-  const resultArea = document.getElementById('resultArea');
-  const loadingSpinner = document.getElementById('loadingSpinner');
-  const printBtn = document.getElementById('printBtn');
-  const shareBtn = document.getElementById('shareBtn');
+function getCachedData(sheetName) {
+  const raw = localStorage.getItem(sheetName);
+  if (!raw) return null;
 
-  // تغيير ألوان أزرار البحث حسب ثيم الصفحة
-  const searchBtn = document.getElementById('searchBtn');
-  searchBtn.style.backgroundColor = '#ff6a00';
-  searchBtn.style.color = '#fff';
-  searchBtn.style.border = 'none';
-  searchBtn.style.fontWeight = '700';
-  searchBtn.style.fontSize = '1.1rem';
-  searchBtn.style.borderRadius = '50px';
-  searchBtn.style.boxShadow = '0 4px 20px #ff6a00cc';
-  searchBtn.style.transition = 'background 0.3s ease, box-shadow 0.3s ease';
-  searchBtn.onmouseover = () => {
-    searchBtn.style.backgroundColor = '#e65c00';
-    searchBtn.style.boxShadow = '0 6px 20px #e65c00cc';
-  };
-  searchBtn.onmouseout = () => {
-    searchBtn.style.backgroundColor = '#ff6a00';
-    searchBtn.style.boxShadow = '0 4px 20px #ff6a00cc';
-  };
-
-  function showLoading(show) {
-    loadingSpinner.style.display = show ? 'flex' : 'none';
+  const parsed = JSON.parse(raw);
+  const now = Date.now();
+  if (now - parsed.timestamp > EXPIRATION_MINUTES * 60 * 1000) {
+    localStorage.removeItem(sheetName);
+    return null;
   }
+  return parsed.data;
+}
 
-  function formatResultCard(row) {
-    let result = `<div class="result-card" id="resultCard"><h5>${row['الاسم'] || 'بدون اسم'} - رقم الجلوس ${row['رقم الجلوس'] || 'غير محدد'}</h5><ul>`;
-    for (let key in row) {
-      if (key !== 'الاسم' && key !== 'رقم الجلوس') {
-        result += `<li><strong>${key}:</strong> ${row[key]}</li>`;
-      }
-    }
-    result += '</ul></div>';
-    return result;
-  }
+function saveToCache(sheetName, data) {
+  localStorage.setItem(sheetName, JSON.stringify({
+    timestamp: Date.now(),
+    data: data
+  }));
+}
 
-  async function fetchAndDisplay(sheetName, seatNumber = '') {
-    showLoading(true);
-    resultArea.innerHTML = '';
-    printBtn.disabled = true;
-    shareBtn.disabled = true;
+function fetchData(sheetName, forceRefresh = false) {
+  document.getElementById('loadingSpinner').style.display = 'flex';
 
-    try {
-      const res = await fetch(sheetBaseURL + sheetName);
-      const data = await res.json();
-
-      const filtered = seatNumber ? data.filter(row => String(row['رقم الجلوس']).trim() === seatNumber) : [];
-
-      if (filtered.length === 0) {
-        resultArea.innerHTML = `<div class='alert alert-warning text-dark'>لا توجد نتائج بهذا الرقم.</div>`;
-      } else {
-        filtered.forEach(row => {
-          resultArea.innerHTML += formatResultCard(row);
-        });
-        printBtn.disabled = false;
-        shareBtn.disabled = false;
-      }
-    } catch (error) {
-      resultArea.innerHTML = `<div class='alert alert-danger text-dark'>حدث خطأ أثناء تحميل البيانات.</div>`;
-    } finally {
-      showLoading(false);
+  if (!forceRefresh) {
+    const cached = getCachedData(sheetName);
+    if (cached) {
+      document.getElementById('loadingSpinner').style.display = 'none';
+      return Promise.resolve(cached);
     }
   }
 
-  // طباعة النتيجة
-  printBtn.addEventListener('click', () => {
-    const printContents = document.getElementById('resultCard');
-    if (printContents) {
-      const originalContents = document.body.innerHTML;
-      document.body.innerHTML = printContents.outerHTML;
-      window.print();
-      document.body.innerHTML = originalContents;
-      window.location.reload();
-    }
-  });
-
-  // مشاركة النتيجة (واتساب، تويتر، فيسبوك)
-  shareBtn.addEventListener('click', () => {
-    const card = document.getElementById('resultCard');
-    if (!card) return alert('لا توجد نتيجة للمشاركة.');
-
-    const name = card.querySelector('h5').innerText;
-    let details = '';
-    card.querySelectorAll('li').forEach(li => {
-      details += `${li.innerText}\n`;
+  return fetch(sheetBaseURL + sheetName)
+    .then(res => res.json())
+    .then(data => {
+      saveToCache(sheetName, data);
+      document.getElementById('loadingSpinner').style.display = 'none';
+      return data;
+    })
+    .catch(err => {
+      document.getElementById('loadingSpinner').style.display = 'none';
+      alert("حدث خطأ أثناء تحميل البيانات. تأكد من الاتصال بالإنترنت.");
     });
+}
 
-    const text = encodeURIComponent(`${name}\n${details}\nنتيجة مدرسة عرب الرمل الإعدادية`);
-    const whatsappURL = `https://wa.me/?text=${text}`;
-    const twitterURL = `https://twitter.com/intent/tweet?text=${text}`;
-    const facebookURL = `https://www.facebook.com/sharer/sharer.php?u=&quote=${text}`;
-
-    const shareWindow = window.open('', '_blank', 'width=600,height=400');
-    shareWindow.document.write(`
-      <h4 style="font-family: 'Cairo', sans-serif; color:#764ba2;">مشاركة النتيجة عبر:</h4>
-      <ul style="font-family: 'Cairo', sans-serif; list-style:none; padding-left:0;">
-        <li><a href="${whatsappURL}" target="_blank" style="color:#25D366; text-decoration:none; font-weight:bold;">واتساب</a></li>
-        <li><a href="${twitterURL}" target="_blank" style="color:#1DA1F2; text-decoration:none; font-weight:bold;">تويتر</a></li>
-        <li><a href="${facebookURL}" target="_blank" style="color:#1877F2; text-decoration:none; font-weight:bold;">فيسبوك</a></li>
-      </ul>
-    `);
-  });
-
-  // تبويب الصفوف
-  document.querySelectorAll('[data-grade]').forEach(tab => {
-    tab.addEventListener('click', (e) => {
-      e.preventDefault();
-      document.querySelectorAll('[data-grade]').forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      currentSheet = tab.getAttribute('data-grade');
-      resultArea.innerHTML = '';
-      printBtn.disabled = true;
-      shareBtn.disabled = true;
+function showResult(seatNumber) {
+  fetchData(currentSheet).then(data => {
+    const area = document.getElementById('resultArea');
+    area.innerHTML = '';
+    const filtered = data.filter(row => String(row['رقم الجلوس']).trim() === seatNumber);
+    if (filtered.length === 0) {
+      area.innerHTML = `<div class='alert alert-warning'>لا توجد نتائج بهذا الرقم.</div>`;
+      return;
+    }
+    filtered.forEach(row => {
+      let result = '<div class="card result-card"><div class="card-body">';
+      result += `<h5 class="card-title">${row['الاسم'] || 'بدون اسم'} - رقم الجلوس ${row['رقم الجلوس']}</h5><ul class="list-group list-group-flush">`;
+      for (let key in row) {
+        if (key !== 'الاسم' && key !== 'رقم الجلوس') {
+          result += `<li class="list-group-item">${key}: ${row[key]}</li>`;
+        }
+      }
+      result += '</ul></div></div>';
+      area.innerHTML += result;
     });
   });
+}
 
-  // زر البحث
-  document.getElementById('searchBtn').addEventListener('click', () => {
-    const val = document.getElementById('searchInput').value.trim();
-    if (val) {
-      fetchAndDisplay(currentSheet, val);
-    }
+document.querySelectorAll('[data-grade]').forEach(tab => {
+  tab.addEventListener('click', (e) => {
+    e.preventDefault();
+    document.querySelectorAll('[data-grade]').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    currentSheet = tab.getAttribute('data-grade');
+    document.getElementById('resultArea').innerHTML = '';
   });
+});
+
+document.getElementById('searchBtn').addEventListener('click', () => {
+  const value = document.getElementById('searchInput').value.trim();
+  if (value) showResult(value);
+});
+
+document.getElementById('refreshBtn').addEventListener('click', () => {
+  localStorage.removeItem(currentSheet);
+  alert("تم مسح الكاش، سيتم تحميل بيانات جديدة الآن.");
+});
 </script>
 
 </body>
