@@ -98,7 +98,7 @@
     return result;
   }
 
-  async function fetchAndDisplay(sheetName, seatNumber = '', secretCode = '') {
+  async function fetchAndDisplay(sheetName, seatNumber = '') {
     showLoading(true);
     resultArea.innerHTML = '';
     printBtn.disabled = true;
@@ -109,12 +109,11 @@
       const data = await res.json();
 
       const filtered = data.filter(row =>
-        String(row['رقم الجلوس']).trim() === seatNumber &&
-        String(row['الكود السري']).trim() === secretCode
+        String(row['رقم الجلوس']).trim() === seatNumber
       );
 
       if (filtered.length === 0) {
-        resultArea.innerHTML = `<div class='alert alert-warning text-dark'>رقم الجلوس أو الكود السري غير صحيح.</div>`;
+        resultArea.innerHTML = `<div class='alert alert-warning text-dark'>رقم الجلوس غير صحيح أو لا توجد نتيجة.</div>`;
       } else {
         filtered.forEach(row => {
           resultArea.innerHTML += formatResultCard(row);
@@ -180,17 +179,17 @@
 
   document.getElementById('searchBtn').addEventListener('click', () => {
     const seatNumber = document.getElementById('searchInput').value.trim();
-    const secretCode = document.getElementById('codeInput').value.trim();
-    if (seatNumber && secretCode) {
-      fetchAndDisplay(currentSheet, seatNumber, secretCode);
+    if (seatNumber) {
+      fetchAndDisplay(currentSheet, seatNumber);
     } else {
-      resultArea.innerHTML = `<div class='alert alert-info text-dark'>من فضلك أدخل رقم الجلوس والكود السري.</div>`;
+      resultArea.innerHTML = `<div class='alert alert-info text-dark'>من فضلك أدخل رقم الجلوس.</div>`;
     }
   });
+
   if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js')
-        .then(() => console.log('Service Worker Registered'));
-    }
+    navigator.serviceWorker.register('service-worker.js')
+      .then(() => console.log('Service Worker Registered'));
+  }
 </script>
 
 </body>
