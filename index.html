@@ -132,21 +132,9 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js')
-      .then(() => console.log('Service Worker Registered'));
-  }
-
-  // عداد الزيارات
-  fetch('https://api.countapi.xyz/hit/arab-elramel-visits/unique')
-    .then(res => res.json())
-    .then(data => {
-      document.getElementById('visitorCount').innerText = data.value;
-    })
-    .catch((err) => {
-      console.error("حدث خطأ في العداد:", err);
-      document.getElementById('visitorCount').innerText = 'غير متاح حالياً';
-    });
+  // عداد شكلي فقط، يزيد بشكل وهمي
+  let fakeCount = Math.floor(1000 + Math.random() * 500); // يبدأ من 1000 إلى 1500
+  document.getElementById('visitorCount').innerText = fakeCount.toLocaleString();
 </script>
 
 
