@@ -87,16 +87,29 @@
     loadingSpinner.style.display = show ? 'flex' : 'none';
   }
 
-  function formatResultCard(row) {
-    let result = `<div class="result-card" id="resultCard"><h5>${row['الاسم'] || 'بدون اسم'} - رقم الجلوس ${row['رقم الجلوس'] || 'غير محدد'}</h5><ul>`;
-    for (let key in row) {
-      if (key !== 'الاسم' && key !== 'رقم الجلوس' && key !== 'الكود السري') {
-        result += `<li><strong>${key}:</strong> ${row[key]}</li>`;
-      }
+ function formatResultCard(row) {
+  let result = `<div class="result-card" id="resultCard"><h5>${row['الاسم'] || 'بدون اسم'} - رقم الجلوس ${row['رقم الجلوس'] || 'غير محدد'}</h5><ul>`;
+
+  for (let key in row) {
+    if (
+      key !== 'الاسم' &&
+      key !== 'رقم الجلوس' &&
+      key !== 'الكود السري' &&
+      !key.includes('تقدير')
+    ) {
+      // البحث عن تقدير المادة المقابل (مثلاً: "تقدير: اللغة العربية")
+      const gradeKey = Object.keys(row).find(
+        k => k.includes('تقدير') && k.includes(key)
+      );
+      const grade = gradeKey ? ` (${row[gradeKey]})` : '';
+      result += `<li><strong>${key}:</strong> ${row[key]}${grade}</li>`;
     }
-    result += '</ul></div>';
-    return result;
   }
+
+  result += '</ul></div>';
+  return result;
+}
+
 
   async function fetchAndDisplay(sheetName, seatNumber = '') {
     showLoading(true);
