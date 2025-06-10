@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>🌟 أوائل الطلاب - مدرسة عرب الرمل</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet" />
+</head>
+<body>
+<div class="container my-5">
+  <h2 class="text-center">🏆 أوائل الصف الأول الثانوي</h2>
+  <table class="table table-bordered" id="top-ula">
+    <thead><tr><th>الترتيب</th><th>الاسم</th><th>المجموع</th></tr></thead>
+    <tbody></tbody>
+  </table>
+
+  <h2 class="text-center mt-5">🏆 أوائل الصف الثاني الإعدادي</h2>
+  <table class="table table-bordered" id="top-thania">
+    <thead><tr><th>الترتيب</th><th>الاسم</th><th>المجموع</th></tr></thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<script>
+  // رابط API من opensheet
+  const API_BASE = 'https://opensheet.elk.sh/1y7NekqhM3tJ8FCQFiBKtJpOwtJrfY13rtiWF6M-Ttcg';
+
+  // تحميل وعرض أفضل 10 من شيت معين
+  async function loadTop(sheetName, tableId) {
+    try {
+      const res = await fetch(`${API_BASE}/${encodeURIComponent(sheetName)}`);
+      const rows = await res.json();
+      const sorted = rows
+        .filter(r => r["الاسم"] && r["المجموع"])
+        .sort((a,b) => parseFloat(b["المجموع"]) - parseFloat(a["المجموع"]));
+      const top = sorted.slice(0, 10);
+
+      const body = document.querySelector(`#${tableId} tbody`);
+      body.innerHTML = '';
+      top.forEach((r, i) => {
+        body.innerHTML += `<tr>
+          <td>${i+1}</td>
+          <td>${r["الاسم"]}</td>
+          <td>${r["المجموع"]}</td>
+        </tr>`;
+      });
+    } catch (e) {
+      console.error('Error loading sheet', sheetName, e);
+    }
+  }
+
+  // تحميل بيانات الأوائل
+  loadTop('أولى', 'top-ula');
+  loadTop('ثانية', 'top-thania');
+</script>
+</body>
+</html>
