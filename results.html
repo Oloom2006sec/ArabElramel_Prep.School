@@ -35,23 +35,6 @@
     .share-btn {
       cursor: pointer;
     }
-    .grade-cell {
-      background-color: #fff3cd;
-    }
-    .limits-cell {
-      background-color: #d1ecf1;
-    }
-    .summary-row {
-      background-color: #d4edda;
-      font-weight: bold;
-    }
-    table.result-table {
-      width: 100%;
-      margin-top: 15px;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      overflow: hidden;
-    }
   </style>
 </head>
 <body>
@@ -105,56 +88,13 @@
   }
 
   function formatResultCard(row) {
-    let result = `<div class="result-card" id="resultCard">
-      <h5>${row['الاسم'] || 'بدون اسم'} - رقم الجلوس ${row['رقم الجلوس'] || 'غير محدد'}</h5>
-      <table class="table table-bordered text-center result-table">
-        <thead class="table-primary">
-          <tr><th>المادة</th><th>الدرجة</th><th class="grade-cell">التقدير</th><th class="limits-cell">الحد الأدنى</th><th class="limits-cell">الحد الأقصى</th></tr>
-        </thead>
-        <tbody>`;
-
-    const subjects = [
-      { name: 'اللغة العربية', max: 80, min: 40 },
-      { name: 'اللغة الإنجليزية', max: 60, min: 30 },
-      { name: 'الرياضيات', max: 60, min: 30 },
-      { name: 'العلوم', max: 40, min: 20 },
-      { name: 'الدراسات', max: 40, min: 20 },
-      { name: 'الحاسب', max: 20, min: 10 },
-      { name: 'الفنية', max: 20, min: 10 },
-      { name: 'الدين', max: 40, min: 20 },
-    ];
-
-    let total = 0;
-    let maxTotal = 0;
-    let minTotal = 0;
-
-    subjects.forEach(sub => {
-      const score = parseFloat(row[sub.name]) || 0;
-      total += score;
-      maxTotal += sub.max;
-      minTotal += sub.min;
-      const grade = score >= sub.max * 0.85 ? 'امتياز' : score >= sub.max * 0.7 ? 'جيد جداً' : score >= sub.max * 0.5 ? 'جيد' : 'ضعيف';
-
-      result += `<tr>
-        <td>${sub.name}</td>
-        <td>${score}</td>
-        <td class="grade-cell">${grade}</td>
-        <td class="limits-cell">${sub.min}</td>
-        <td class="limits-cell">${sub.max}</td>
-      </tr>`;
-    });
-
-    const avgGrade = total >= maxTotal * 0.85 ? 'امتياز' : total >= maxTotal * 0.7 ? 'جيد جداً' : total >= maxTotal * 0.5 ? 'جيد' : 'ضعيف';
-
-    result += `<tr class="summary-row">
-      <td><strong>المجموع الكلى</strong></td>
-      <td><strong>${total}</strong></td>
-      <td class="grade-cell"><strong>${avgGrade}</strong></td>
-      <td class="limits-cell"><strong>${minTotal}</strong></td>
-      <td class="limits-cell"><strong>${maxTotal}</strong></td>
-    </tr>`;
-
-    result += '</tbody></table></div>';
+    let result = `<div class="result-card" id="resultCard"><h5>${row['الاسم'] || 'بدون اسم'} - رقم الجلوس ${row['رقم الجلوس'] || 'غير محدد'}</h5><ul>`;
+    for (let key in row) {
+      if (key !== 'الاسم' && key !== 'رقم الجلوس' && key !== 'الكود السري') {
+        result += `<li><strong>${key}:</strong> ${row[key]}</li>`;
+      }
+    }
+    result += '</ul></div>';
     return result;
   }
 
@@ -168,7 +108,9 @@
       const res = await fetch(sheetBaseURL + sheetName);
       const data = await res.json();
 
-      const filtered = data.filter(row => String(row['رقم الجلوس']).trim() === seatNumber);
+      const filtered = data.filter(row =>
+        String(row['رقم الجلوس']).trim() === seatNumber
+      );
 
       if (filtered.length === 0) {
         resultArea.innerHTML = `<div class='alert alert-warning text-dark'>رقم الجلوس غير صحيح أو لا توجد نتيجة.</div>`;
@@ -186,13 +128,41 @@
     }
   }
 
-  document.getElementById('searchBtn').addEventListener('click', () => {
-    const seatNumber = document.getElementById('searchInput').value.trim();
-    if (seatNumber) {
-      fetchAndDisplay(currentSheet, seatNumber);
-    } else {
-      resultArea.innerHTML = `<div class='alert alert-info text-dark'>من فضلك أدخل رقم الجلوس.</div>`;
+  printBtn.addEventListener('click', () => {
+    const printContents = document.getElementById('resultCard');
+    if (printContents) {
+      const originalContents = document.body.innerHTML;
+      document.body.innerHTML = printContents.outerHTML;
+      window.print();
+      document.body.innerHTML = originalContents;
+      window.location.reload();
     }
+  });
+
+  shareBtn.addEventListener('click', () => {
+    const card = document.getElementById('resultCard');
+    if (!card) return alert('لا توجد نتيجة للمشاركة.');
+
+    const name = card.querySelector('h5').innerText;
+    let details = '';
+    card.querySelectorAll('li').forEach(li => {
+      details += `${li.innerText}\n`;
+    });
+
+    const text = encodeURIComponent(`${name}\n${details}\nنتيجة مدرسة عرب الرمل الإعدادية`);
+    const whatsappURL = `https://wa.me/?text=${text}`;
+    const twitterURL = `https://twitter.com/intent/tweet?text=${text}`;
+    const facebookURL = `https://www.facebook.com/sharer/sharer.php?u=&quote=${text}`;
+
+    const shareWindow = window.open('', '_blank', 'width=600,height=400');
+    shareWindow.document.write(`
+      <h4 style="font-family: 'Cairo', sans-serif; color:#764ba2;">مشاركة النتيجة عبر:</h4>
+      <ul style="font-family: 'Cairo', sans-serif; list-style:none; padding-left:0;">
+        <li><a href="${whatsappURL}" target="_blank" style="color:#25D366; text-decoration:none; font-weight:bold;">واتساب</a></li>
+        <li><a href="${twitterURL}" target="_blank" style="color:#1DA1F2; text-decoration:none; font-weight:bold;">تويتر</a></li>
+        <li><a href="${facebookURL}" target="_blank" style="color:#1877F2; text-decoration:none; font-weight:bold;">فيسبوك</a></li>
+      </ul>
+    `);
   });
 
   document.querySelectorAll('[data-grade]').forEach(tab => {
@@ -206,6 +176,20 @@
       shareBtn.disabled = true;
     });
   });
+
+  document.getElementById('searchBtn').addEventListener('click', () => {
+    const seatNumber = document.getElementById('searchInput').value.trim();
+    if (seatNumber) {
+      fetchAndDisplay(currentSheet, seatNumber);
+    } else {
+      resultArea.innerHTML = `<div class='alert alert-info text-dark'>من فضلك أدخل رقم الجلوس.</div>`;
+    }
+  });
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(() => console.log('Service Worker Registered'));
+  }
 </script>
 
 </body>
