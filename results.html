@@ -119,9 +119,9 @@
       { name: 'الرياضيات', max: 60, min: 30 },
       { name: 'العلوم', max: 40, min: 20 },
       { name: 'الدراسات', max: 40, min: 20 },
-      { name: 'حاسب', max: 20, min: 10 },
-      { name: 'تربية فنية', max: 20, min: 10 },
-      { name: 'دين', max: 40, min: 20 },
+      { name: 'الحاسب', max: 20, min: 10 },
+      { name: 'الفنية', max: 20, min: 10 },
+      { name: 'الدين', max: 40, min: 20 },
     ];
 
     let total = 0;
@@ -147,7 +147,7 @@
     const avgGrade = total >= maxTotal * 0.85 ? 'امتياز' : total >= maxTotal * 0.7 ? 'جيد جداً' : total >= maxTotal * 0.5 ? 'جيد' : 'ضعيف';
 
     result += `<tr class="summary-row">
-      <td><strong>المجموع</strong></td>
+      <td><strong>المجموع الكلى</strong></td>
       <td><strong>${total}</strong></td>
       <td class="grade-cell"><strong>${avgGrade}</strong></td>
       <td class="limits-cell"><strong>${minTotal}</strong></td>
