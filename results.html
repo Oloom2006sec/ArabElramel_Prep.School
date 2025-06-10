@@ -83,49 +83,17 @@
   const printBtn = document.getElementById('printBtn');
   const shareBtn = document.getElementById('shareBtn');
 
-  const gradingScale = {
-    'اللغة العربية': { max: 80, min: 40 },
-    'اللغة الإنجليزية': { max: 60, min: 30 },
-    'الدراسات': { max: 40, min: 20 },
-    'الرياضيات': { max: 60, min: 30 },
-    'العلوم': { max: 40, min: 20 },
-    'فنية': { max: 20, min: 10 },
-    'حاسب': { max: 20, min: 10 },
-    'دين': { max: 40, min: 20 }
-  };
-
-  function getGrade(subject, score) {
-  if (isNaN(score)) return '';
-
-  // نحاول مطابقة اسم المادة بأي مفتاح موجود في gradingScale
-  let matchedKey = Object.keys(gradingScale).find(key => subject.trim().includes(key));
-  if (!matchedKey) return '';
-
-  const info = gradingScale[matchedKey];
-  const percentage = (parseFloat(score) / info.max) * 100;
-
-  if (percentage >= 85) return 'ممتاز';
-  if (percentage >= 70) return 'جيد جداً';
-  if (percentage >= 55) return 'جيد';
-  if (percentage >= 40) return 'مقبول';
-  return 'ضعيف';
-}
-
   function showLoading(show) {
     loadingSpinner.style.display = show ? 'flex' : 'none';
   }
 
   function formatResultCard(row) {
-  let result = `<div class="result-card" id="resultCard"><h5>${row['الاسم'] || 'بدون اسم'} - رقم الجلوس ${row['رقم الجلوس'] || 'غير محدد'}</h5><ul>`;
-  for (let key in row) {
-    if (key !== 'الاسم' && key !== 'رقم الجلوس' && key !== 'الكود السري') {
-      result += `<li><strong>${key}:</strong> ${row[key]}</li>`;
+    let result = `<div class="result-card" id="resultCard"><h5>${row['الاسم'] || 'بدون اسم'} - رقم الجلوس ${row['رقم الجلوس'] || 'غير محدد'}</h5><ul>`;
+    for (let key in row) {
+      if (key !== 'الاسم' && key !== 'رقم الجلوس' && key !== 'الكود السري') {
+        result += `<li><strong>${key}:</strong> ${row[key]}</li>`;
+      }
     }
-  }
-  result += '</ul></div>';
-  return result;
-}
-
     result += '</ul></div>';
     return result;
   }
@@ -223,7 +191,6 @@
       .then(() => console.log('Service Worker Registered'));
   }
 </script>
-
 
 </body>
 </html>
