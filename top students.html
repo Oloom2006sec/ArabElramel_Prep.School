@@ -9,13 +9,13 @@
 <div class="container my-5">
   <h2 class="text-center">🏆 أوائل الصف الأول الاعدادى</h2>
   <table class="table table-bordered" id="top-ula">
-    <thead><tr><th>الترتيب</th><th>الاسم</th><th>المجموع</th></tr></thead>
+    <thead><tr><th>الترتيب</th><th>الاسم</th><th>المجموع الكلى</th></tr></thead>
     <tbody></tbody>
   </table>
 
   <h2 class="text-center mt-5">🏆 أوائل الصف الثاني الإعدادي</h2>
   <table class="table table-bordered" id="top-thania">
-    <thead><tr><th>الترتيب</th><th>الاسم</th><th>المجموع</th></tr></thead>
+    <thead><tr><th>الترتيب</th><th>الاسم</th><th>المجموع الكلى</th></tr></thead>
     <tbody></tbody>
   </table>
 </div>
@@ -30,8 +30,8 @@
       const res = await fetch(`${API_BASE}/${encodeURIComponent(sheetName)}`);
       const rows = await res.json();
       const sorted = rows
-        .filter(r => r["الاسم"] && r["المجموع"])
-        .sort((a,b) => parseFloat(b["المجموع"]) - parseFloat(a["المجموع"]));
+        .filter(r => r["الاسم"] && r["المجموع الكلى"])
+        .sort((a,b) => parseFloat(b["المجموع الكلى"]) - parseFloat(a["المجموع الكلى"]));
       const top = sorted.slice(0, 10);
 
       const body = document.querySelector(`#${tableId} tbody`);
@@ -40,7 +40,7 @@
         body.innerHTML += `<tr>
           <td>${i+1}</td>
           <td>${r["الاسم"]}</td>
-          <td>${r["المجموع"]}</td>
+          <td>${r["المجموع الكلى"]}</td>
         </tr>`;
       });
     } catch (e) {
