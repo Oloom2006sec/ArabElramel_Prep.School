@@ -116,16 +116,15 @@
   }
 
   function formatResultCard(row) {
-    let result = `<div class="result-card" id="resultCard"><h5>${row['الاسم'] || 'بدون اسم'} - رقم الجلوس ${row['رقم الجلوس'] || 'غير محدد'}</h5><ul>`;
-    
-    for (let key in row) {
-      if (key !== 'الاسم' && key !== 'رقم الجلوس' && key !== 'الكود السري') {
-        const score = parseFloat(row[key]);
-        const grade = getGrade(key, score);
-        const gradeText = grade ? ` - التقدير: ${grade}` : '';
-        result += `<li><strong>${key}:</strong> ${row[key]}${gradeText}</li>`;
-      }
+  let result = `<div class="result-card" id="resultCard"><h5>${row['الاسم'] || 'بدون اسم'} - رقم الجلوس ${row['رقم الجلوس'] || 'غير محدد'}</h5><ul>`;
+  for (let key in row) {
+    if (key !== 'الاسم' && key !== 'رقم الجلوس' && key !== 'الكود السري') {
+      result += `<li><strong>${key}:</strong> ${row[key]}</li>`;
     }
+  }
+  result += '</ul></div>';
+  return result;
+}
 
     result += '</ul></div>';
     return result;
