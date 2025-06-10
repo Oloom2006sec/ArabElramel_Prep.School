@@ -124,14 +124,13 @@
     </div>
   </div>
 
-  <!-- Footer -->
+ <!-- Footer -->
 <footer class="text-center">
   <p>&copy; 2025 مدرسة عرب الرمل الاعدادية المشتركة. جميع الحقوق محفوظة.</p>
   <p>👥 عدد زوار الموقع: <span id="visitorCount">جارٍ التحميل...</span></p>
 </footer>
 
-
- <!-- Bootstrap JS -->
+<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- Visitor Counter Script -->
@@ -141,8 +140,8 @@
       .then(() => console.log('Service Worker Registered'));
   }
 
-  // عداد الزوار باستخدام countapi
-  fetch('https://api.countapi.xyz/hit/arabraml.com/visits')
+  // عداد الزوار باستخدام CountAPI بمفتاح جديد
+  fetch('https://api.countapi.xyz/hit/arabraml-school/website')
     .then(res => res.json())
     .then(data => {
       document.getElementById('visitorCount').innerText = data.value;
@@ -151,6 +150,7 @@
       document.getElementById('visitorCount').innerText = 'غير متاح حالياً';
     });
 </script>
+
 
 </body>
 </html>
