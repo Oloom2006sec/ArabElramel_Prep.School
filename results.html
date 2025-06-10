@@ -95,16 +95,21 @@
   };
 
   function getGrade(subject, score) {
-    const info = gradingScale[subject];
-    if (!info || isNaN(score)) return '';
-    const percentage = (parseFloat(score) / info.max) * 100;
+  if (isNaN(score)) return '';
 
-    if (percentage >= 85) return 'ممتاز';
-    if (percentage >= 70) return 'جيد جداً';
-    if (percentage >= 55) return 'جيد';
-    if (percentage >= 40) return 'مقبول';
-    return 'ضعيف';
-  }
+  // نحاول مطابقة اسم المادة بأي مفتاح موجود في gradingScale
+  let matchedKey = Object.keys(gradingScale).find(key => subject.trim().includes(key));
+  if (!matchedKey) return '';
+
+  const info = gradingScale[matchedKey];
+  const percentage = (parseFloat(score) / info.max) * 100;
+
+  if (percentage >= 85) return 'ممتاز';
+  if (percentage >= 70) return 'جيد جداً';
+  if (percentage >= 55) return 'جيد';
+  if (percentage >= 40) return 'مقبول';
+  return 'ضعيف';
+}
 
   function showLoading(show) {
     loadingSpinner.style.display = show ? 'flex' : 'none';
