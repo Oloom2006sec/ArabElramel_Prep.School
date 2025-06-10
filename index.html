@@ -124,25 +124,20 @@
     </div>
   </div>
 
-<!-- Footer -->
 <footer class="text-center">
   <p>&copy; 2025 مدرسة عرب الرمل الاعدادية المشتركة. جميع الحقوق محفوظة.</p>
   <p>👥 عدد زوار الموقع: <span id="visitorCount">جارٍ التحميل...</span></p>
 </footer>
 
-<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- Visitor Counter Script -->
 <script>
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('service-worker.js')
       .then(() => console.log('Service Worker Registered'));
   }
 
-  // استخدام مفتاح تجريبي مجرب ويعمل
- fetch('https://api.countapi.xyz/hit/oloom2006sec.github.io/arab_elramel')
-
+  fetch('https://api.countapi.xyz/hit/oloom2006sec.github.io/arab_elramel')
     .then(res => res.json())
     .then(data => {
       document.getElementById('visitorCount').innerText = data.value;
@@ -152,7 +147,6 @@
       document.getElementById('visitorCount').innerText = 'غير متاح حالياً';
     });
 </script>
-
 
 
 </body>
