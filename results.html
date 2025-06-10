@@ -81,76 +81,44 @@
   const printBtn = document.getElementById('printBtn');
   const shareBtn = document.getElementById('shareBtn');
 
+  const gradeScale = {
+    'اللغة العربية': [80, 40],
+    'اللغة الانجليزية': [60, 30],
+    'الدراسات': [40, 20],
+    'الرياضيات': [60, 30],
+    'العلوم': [40, 20],
+    'فنية': [20, 10],
+    'حاسب': [20, 10],
+    'دين': [40, 20],
+    'المجموع الكلي': [280, 140]
+  };
+
+  function getGradeMark(score, max) {
+    const percent = (score / max) * 100;
+    if (percent >= 85) return 'ممتاز';
+    if (percent >= 70) return 'جيد جدًا';
+    if (percent >= 55) return 'جيد';
+    if (percent >= 40) return 'مقبول';
+    return 'ضعيف';
+  }
+
   function showLoading(show) {
     loadingSpinner.style.display = show ? 'flex' : 'none';
   }
 
- function formatResultCard(row) {
-  const limits = {
-    "اللغة العربية": [40, 80],
-    "اللغة الإنجليزية": [30, 60],
-    "الدراسات": [20, 40],
-    "الرياضيات": [30, 60],
-    "العلوم": [20, 40],
-    "فنية": [10, 20],
-    "حاسب": [10, 20],
-    "دين": [20, 40],
-    "المجموع": [140, 280],
-  };
-
-  let result = `<div class="result-card resultCard">
-    <h5>${row['الاسم'] || 'بدون اسم'} - رقم الجلوس ${row['رقم الجلوس'] || 'غير محدد'}</h5>
-    <div class="table-responsive">
-      <table class="table table-bordered text-center align-middle">
-        <thead class="table-primary">
-          <tr>
-            <th>المادة</th>
-            <th>الدرجة</th>
-            <th>التقدير</th>
-            <th>الحد الأدنى</th>
-            <th>الحد الأقصى</th>
-          </tr>
-        </thead>
-        <tbody>
-  `;
-
-  for (let key in row) {
-    if (!['الاسم', 'رقم الجلوس', 'الكود السري', 'ترتيب الطالب'].includes(key)) {
-      let mark = parseFloat(row[key]);
-      const [min, max] = limits[key] || [0, 100];
-      let grade = '';
-
-      if (!isNaN(mark)) {
-        if (mark >= 0.85 * max) grade = 'ممتاز';
-        else if (mark >= 0.7 * max) grade = 'جيد جدًا';
-        else if (mark >= 0.5 * max) grade = 'جيد';
-        else if (mark >= min) grade = 'مقبول';
-        else grade = 'ضعيف';
-      } else {
-        grade = 'غير متوفرة';
+  function formatResultCard(row) {
+    let result = `<div class="result-card resultCard"><h5>${row['الاسم'] || 'بدون اسم'} - رقم الجلوس ${row['رقم الجلوس'] || 'غير محدد'}</h5>`;
+    for (let key in gradeScale) {
+      const [max, min] = gradeScale[key];
+      const score = parseFloat(row[key]);
+      if (!isNaN(score)) {
+        const grade = getGradeMark(score, max);
+        result += `<p>${key} (${max} / ${min}): ${score} (${grade})</p>`;
       }
-
-      result += `
-        <tr>
-          <td>${key}</td>
-          <td>${row[key]}</td>
-          <td>${grade}</td>
-          <td>${min}</td>
-          <td>${max}</td>
-        </tr>
-      `;
     }
+    result += `</div>`;
+    return result;
   }
-
-  result += `
-        </tbody>
-      </table>
-    </div>
-  </div>`;
-
-  return result;
-}
-
 
   async function fetchAndDisplay(sheetName, seatNumber = '') {
     showLoading(true);
@@ -198,10 +166,9 @@
     if (!card) return alert('لا توجد نتيجة للمشاركة.');
 
     const name = card.querySelector('h5').innerText;
+    const paragraphs = card.querySelectorAll('p');
     let details = '';
-    card.querySelectorAll('li').forEach(li => {
-      details += `${li.innerText}\n`;
-    });
+    paragraphs.forEach(p => details += `${p.innerText}\n`);
 
     const text = encodeURIComponent(`${name}\n${details}\nنتيجة مدرسة عرب الرمل الإعدادية`);
     const whatsappURL = `https://wa.me/?text=${text}`;
