@@ -85,16 +85,72 @@
     loadingSpinner.style.display = show ? 'flex' : 'none';
   }
 
-  function formatResultCard(row) {
-    let result = `<div class="result-card resultCard"><h5>${row['الاسم'] || 'بدون اسم'} - رقم الجلوس ${row['رقم الجلوس'] || 'غير محدد'}</h5><ul>`;
-    for (let key in row) {
-      if (!['الاسم', 'رقم الجلوس', 'الكود السري'].includes(key)) {
-        result += `<li><strong>${key}:</strong> ${row[key]}</li>`;
+ function formatResultCard(row) {
+  const limits = {
+    "اللغة العربية": [40, 80],
+    "اللغة الإنجليزية": [30, 60],
+    "الدراسات": [20, 40],
+    "الرياضيات": [30, 60],
+    "العلوم": [20, 40],
+    "فنية": [10, 20],
+    "حاسب": [10, 20],
+    "دين": [20, 40],
+    "المجموع": [140, 280],
+  };
+
+  let result = `<div class="result-card resultCard">
+    <h5>${row['الاسم'] || 'بدون اسم'} - رقم الجلوس ${row['رقم الجلوس'] || 'غير محدد'}</h5>
+    <div class="table-responsive">
+      <table class="table table-bordered text-center align-middle">
+        <thead class="table-primary">
+          <tr>
+            <th>المادة</th>
+            <th>الدرجة</th>
+            <th>التقدير</th>
+            <th>الحد الأدنى</th>
+            <th>الحد الأقصى</th>
+          </tr>
+        </thead>
+        <tbody>
+  `;
+
+  for (let key in row) {
+    if (!['الاسم', 'رقم الجلوس', 'الكود السري', 'ترتيب الطالب'].includes(key)) {
+      let mark = parseFloat(row[key]);
+      const [min, max] = limits[key] || [0, 100];
+      let grade = '';
+
+      if (!isNaN(mark)) {
+        if (mark >= 0.85 * max) grade = 'ممتاز';
+        else if (mark >= 0.7 * max) grade = 'جيد جدًا';
+        else if (mark >= 0.5 * max) grade = 'جيد';
+        else if (mark >= min) grade = 'مقبول';
+        else grade = 'ضعيف';
+      } else {
+        grade = 'غير متوفرة';
       }
+
+      result += `
+        <tr>
+          <td>${key}</td>
+          <td>${row[key]}</td>
+          <td>${grade}</td>
+          <td>${min}</td>
+          <td>${max}</td>
+        </tr>
+      `;
     }
-    result += '</ul></div>';
-    return result;
   }
+
+  result += `
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+
+  return result;
+}
+
 
   async function fetchAndDisplay(sheetName, seatNumber = '') {
     showLoading(true);
