@@ -1,3 +1,4 @@
+<!-- تمت مراجعة الكود من قبل ChatGPT -->
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -31,9 +32,6 @@
     }
     .btn-group-custom {
       margin-top: 15px;
-    }
-    .share-btn {
-      cursor: pointer;
     }
   </style>
 </head>
@@ -88,9 +86,9 @@
   }
 
   function formatResultCard(row) {
-    let result = `<div class="result-card" id="resultCard"><h5>${row['الاسم'] || 'بدون اسم'} - رقم الجلوس ${row['رقم الجلوس'] || 'غير محدد'}</h5><ul>`;
+    let result = `<div class="result-card resultCard"><h5>${row['الاسم'] || 'بدون اسم'} - رقم الجلوس ${row['رقم الجلوس'] || 'غير محدد'}</h5><ul>`;
     for (let key in row) {
-      if (key !== 'الاسم' && key !== 'رقم الجلوس' && key !== 'الكود السري') {
+      if (!['الاسم', 'رقم الجلوس', 'الكود السري'].includes(key)) {
         result += `<li><strong>${key}:</strong> ${row[key]}</li>`;
       }
     }
@@ -105,11 +103,11 @@
     shareBtn.disabled = true;
 
     try {
-      const res = await fetch(sheetBaseURL + sheetName);
+      const res = await fetch(sheetBaseURL + encodeURIComponent(sheetName));
       const data = await res.json();
 
       const filtered = data.filter(row =>
-        String(row['رقم الجلوس']).trim() === seatNumber
+        String(row['رقم الجلوس'] || '').trim() === seatNumber
       );
 
       if (filtered.length === 0) {
@@ -129,10 +127,10 @@
   }
 
   printBtn.addEventListener('click', () => {
-    const printContents = document.getElementById('resultCard');
-    if (printContents) {
+    const card = document.querySelector('.resultCard');
+    if (card) {
       const originalContents = document.body.innerHTML;
-      document.body.innerHTML = printContents.outerHTML;
+      document.body.innerHTML = card.outerHTML;
       window.print();
       document.body.innerHTML = originalContents;
       window.location.reload();
@@ -140,7 +138,7 @@
   });
 
   shareBtn.addEventListener('click', () => {
-    const card = document.getElementById('resultCard');
+    const card = document.querySelector('.resultCard');
     if (!card) return alert('لا توجد نتيجة للمشاركة.');
 
     const name = card.querySelector('h5').innerText;
