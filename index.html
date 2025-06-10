@@ -137,7 +137,8 @@
       .then(() => console.log('Service Worker Registered'));
   }
 
-  fetch('https://api.countapi.xyz/hit/oloom2006sec.github.io/arab_elramel')
+  // عداد الزيارات
+  fetch('https://api.countapi.xyz/hit/arab-elramel-visits/unique')
     .then(res => res.json())
     .then(data => {
       document.getElementById('visitorCount').innerText = data.value;
