@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Cairo&display=swap" rel="stylesheet" />
+  <link rel="manifest" href="manifest.json" />
   <style>
     body {
       padding: 40px 20px;
@@ -18,31 +19,21 @@
       border-radius: 10px;
       background: white;
       padding: 20px;
-      overflow-x: auto;
+      transition: box-shadow 0.3s ease;
     }
     .result-card:hover {
       box-shadow: 0 5px 25px rgb(0 0 0 / 0.15);
-    }
-    th, td {
-      vertical-align: middle !important;
-    }
-    .grade-col {
-      background-color: #e8f0fe;
-    }
-    .mark-col {
-      background-color: #f0f9eb;
-    }
-    .range-col {
-      background-color: #fef7e0;
-    }
-    .total-row {
-      font-weight: bold;
-      background: #d1ecf1 !important;
     }
     #loadingSpinner {
       display: none;
       justify-content: center;
       margin-top: 20px;
+    }
+    .btn-group-custom {
+      margin-top: 15px;
+    }
+    .share-btn {
+      cursor: pointer;
     }
   </style>
 </head>
@@ -52,9 +43,15 @@
   <h1 class="text-center mb-4">📊 نتائج الطلاب</h1>
 
   <ul class="nav nav-tabs mb-3" id="gradeTabs">
-    <li class="nav-item"><a class="nav-link active" data-grade="أولى" href="#">الصف الأول الإعدادي</a></li>
-    <li class="nav-item"><a class="nav-link" data-grade="ثانية" href="#">الصف الثاني الإعدادي</a></li>
-    <li class="nav-item"><a class="nav-link" data-grade="ثالثة" href="#">الصف الثالث الإعدادي</a></li>
+    <li class="nav-item">
+      <a class="nav-link active" data-grade="أولى" href="#">الصف الأول الإعدادي</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-grade="ثانية" href="#">الصف الثاني الإعدادي</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-grade="ثالثة" href="#">الصف الثالث الإعدادي</a>
+    </li>
   </ul>
 
   <div class="mb-3">
@@ -70,7 +67,7 @@
 
   <div id="resultArea"></div>
 
-  <div class="btn-group btn-group-custom mt-3 w-100" role="group" aria-label="Actions">
+  <div class="btn-group btn-group-custom" role="group" aria-label="Actions">
     <button id="printBtn" class="btn btn-success" disabled>🖨️ طباعة النتيجة</button>
     <button id="shareBtn" class="btn btn-info" disabled>📤 مشاركة النتيجة</button>
     <a href="index.html" class="btn btn-secondary">🏠 الصفحة الرئيسية</a>
@@ -80,18 +77,6 @@
 <script>
   const sheetBaseURL = 'https://opensheet.elk.sh/1y7NekqhM3tJ8FCQFiBKtJpOwtJrfY13rtiWF6M-Ttcg/';
   let currentSheet = 'أولى';
-
-  const subjects = {
-    'اللغة العربية': [80, 40],
-    'اللغة الإنجليزية': [60, 30],
-    'الدراسات': [40, 20],
-    'الرياضيات': [60, 30],
-    'العلوم': [40, 20],
-    'المجموع الكلى': [280, 140],
-    'فنية': [20, 10],
-    'حاسب': [20, 10],
-    'دين': [40, 20],
-  };
 
   const resultArea = document.getElementById('resultArea');
   const loadingSpinner = document.getElementById('loadingSpinner');
@@ -103,44 +88,46 @@
   }
 
   function formatResultCard(row) {
-    let html = `
-      <div class="result-card" id="resultCard">
-        <h5 class="mb-3">${row['الاسم']} - رقم الجلوس ${row['رقم الجلوس']}</h5>
-        <table class="table table-bordered text-center">
-          <thead class="table-light">
-            <tr>
-              <th>المادة</th>
-              <th class="mark-col">الدرجة</th>
-              <th class="grade-col">التقدير</th>
-              <th class="range-col">الحد الأدنى</th>
-              <th class="range-col">الحد الأقصى</th>
-            </tr>
-          </thead>
-          <tbody>`;
+    const name = row['الاسم'] || 'بدون اسم';
+    const seat = row['رقم الجلوس'] || 'غير محدد';
 
-    for (let subject in subjects) {
-      const [max, min] = subjects[subject];
-      const score = row[subject] || '';
-      const grade = row['تقدير ' + subject] || '';
+    const subjects = Object.keys(row).filter(key =>
+      key !== 'الاسم' &&
+      key !== 'رقم الجلوس' &&
+      key !== 'الكود السري' &&
+      !key.includes('تقدير')
+    );
 
-      html += `
-        <tr${subject === 'المجموع الكلى' ? ' class="total-row"' : ''}>
+    let tableRows = '';
+    subjects.forEach(subject => {
+      const mark = row[subject] || '';
+      const grade = row[`تقدير ${subject}`] || '';
+      tableRows += `
+        <tr>
           <td>${subject}</td>
-          <td class="mark-col">${score}</td>
-          <td class="grade-col">${grade}</td>
-          <td class="range-col">${min}</td>
-          <td class="range-col">${max}</td>
+          <td>${mark}</td>
+          <td>${grade}</td>
         </tr>`;
-    }
+    });
 
-    html += `
-          <tr class="table-info">
-            <td colspan="5"><strong>الحالة:</strong> ${row['الحالة'] || 'غير محددة'}</td>
-          </tr>
-          </tbody>
-        </table>
+    return `
+      <div class="result-card" id="resultCard">
+        <h5>${name} - رقم الجلوس ${seat}</h5>
+        <div class="table-responsive">
+          <table class="table table-bordered text-center">
+            <thead class="table-light">
+              <tr>
+                <th>المادة</th>
+                <th>الدرجة</th>
+                <th>التقدير</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${tableRows}
+            </tbody>
+          </table>
+        </div>
       </div>`;
-    return html;
   }
 
   async function fetchAndDisplay(sheetName, seatNumber = '') {
@@ -190,8 +177,12 @@
 
     const name = card.querySelector('h5').innerText;
     let details = '';
-    card.querySelectorAll('tbody tr').forEach(row => {
-      details += row.innerText + '\n';
+    card.querySelectorAll('tr').forEach((tr, index) => {
+      if (index === 0) return; // skip header
+      const tds = tr.querySelectorAll('td');
+      if (tds.length === 3) {
+        details += `${tds[0].innerText}: ${tds[1].innerText} (${tds[2].innerText})\n`;
+      }
     });
 
     const text = encodeURIComponent(`${name}\n${details}\nنتيجة مدرسة عرب الرمل الإعدادية`);
@@ -230,6 +221,11 @@
       resultArea.innerHTML = `<div class='alert alert-info text-dark'>من فضلك أدخل رقم الجلوس.</div>`;
     }
   });
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(() => console.log('Service Worker Registered'));
+  }
 </script>
 
 </body>
