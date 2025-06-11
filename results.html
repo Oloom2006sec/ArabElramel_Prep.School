@@ -1,63 +1,46 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>نتائج الطلاب - مدرسة عرب الرمل الإعدادية المشتركة</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Cairo&display=swap" rel="stylesheet" />
-  <link rel="manifest" href="manifest.json" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo&display=swap" rel="stylesheet">
   <style>
     body {
-      padding: 40px 20px;
       font-family: 'Cairo', sans-serif;
+      padding: 40px 20px;
       background: #f7f9fc;
     }
     .result-card {
       margin-top: 20px;
-      box-shadow: 0 3px 15px rgb(0 0 0 / 0.1);
-      border-radius: 10px;
-      background: white;
       padding: 20px;
-      transition: box-shadow 0.3s ease;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 3px 15px rgb(0 0 0 / 10%);
     }
     .result-card:hover {
-      box-shadow: 0 5px 25px rgb(0 0 0 / 0.15);
+      box-shadow: 0 5px 25px rgb(0 0 0 / 15%);
     }
     #loadingSpinner {
       display: none;
       justify-content: center;
       margin-top: 20px;
     }
-    .btn-group-custom {
-      margin-top: 15px;
-    }
-    .share-btn {
-      cursor: pointer;
-    }
   </style>
 </head>
 <body>
-
 <div class="container">
   <h1 class="text-center mb-4">📊 نتائج الطلاب</h1>
 
   <ul class="nav nav-tabs mb-3" id="gradeTabs">
-    <li class="nav-item">
-      <a class="nav-link active" data-grade="أولى" href="#">الصف الأول الإعدادي</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" data-grade="ثانية" href="#">الصف الثاني الإعدادي</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" data-grade="ثالثة" href="#">الصف الثالث الإعدادي</a>
-    </li>
+    <li class="nav-item"><a class="nav-link active" data-grade="أولى" href="#">الصف الأول الإعدادي</a></li>
+    <li class="nav-item"><a class="nav-link" data-grade="ثانية" href="#">الصف الثاني الإعدادي</a></li>
+    <li class="nav-item"><a class="nav-link" data-grade="ثالثة" href="#">الصف الثالث الإعدادي</a></li>
   </ul>
 
-  <div class="mb-3">
-    <input type="text" id="searchInput" class="form-control" placeholder="اكتب رقم الجلوس" />
-    <button id="searchBtn" class="btn btn-primary mt-2 w-100">عرض النتيجة</button>
-  </div>
+  <input type="text" id="searchInput" class="form-control" placeholder="اكتب رقم الجلوس">
+  <button id="searchBtn" class="btn btn-primary mt-2 w-100">عرض النتيجة</button>
 
   <div id="loadingSpinner" class="d-flex">
     <div class="spinner-border text-primary" role="status">
@@ -66,167 +49,60 @@
   </div>
 
   <div id="resultArea"></div>
-
-  <div class="btn-group btn-group-custom" role="group" aria-label="Actions">
-    <button id="printBtn" class="btn btn-success" disabled>🖨️ طباعة النتيجة</button>
-    <button id="shareBtn" class="btn btn-info" disabled>📤 مشاركة النتيجة</button>
-    <a href="index.html" class="btn btn-secondary">🏠 الصفحة الرئيسية</a>
-  </div>
 </div>
 
 <script>
   const sheetBaseURL = 'https://opensheet.elk.sh/1y7NekqhM3tJ8FCQFiBKtJpOwtJrfY13rtiWF6M-Ttcg/';
   let currentSheet = 'أولى';
 
-  const resultArea = document.getElementById('resultArea');
-  const loadingSpinner = document.getElementById('loadingSpinner');
-  const printBtn = document.getElementById('printBtn');
-  const shareBtn = document.getElementById('shareBtn');
-
-  function showLoading(show) {
-    loadingSpinner.style.display = show ? 'flex' : 'none';
-  }
-
-  function formatResultCard(row) {
-    const name = row['الاسم'] || 'بدون اسم';
-    const seat = row['رقم الجلوس'] || 'غير محدد';
-
-    const subjects = Object.keys(row).filter(key =>
-      key !== 'الاسم' &&
-      key !== 'رقم الجلوس' &&
-      key !== 'الكود السري' &&
-      !key.includes('تقدير')
-    );
-
-    let tableRows = '';
-    subjects.forEach(subject => {
-      const mark = row[subject] || '';
-      const grade = row[`تقدير ${subject}`] || '';
-      tableRows += `
-        <tr>
-          <td>${subject}</td>
-          <td>${mark}</td>
-          <td>${grade}</td>
-        </tr>`;
-    });
-
-    return `
-      <div class="result-card" id="resultCard">
-        <h5>${name} - رقم الجلوس ${seat}</h5>
-        <div class="table-responsive">
-          <table class="table table-bordered text-center">
-            <thead class="table-light">
-              <tr>
-                <th>المادة</th>
-                <th>الدرجة</th>
-                <th>التقدير</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${tableRows}
-            </tbody>
-          </table>
-        </div>
-      </div>`;
-  }
-
-  async function fetchAndDisplay(sheetName, seatNumber = '') {
-    showLoading(true);
-    resultArea.innerHTML = '';
-    printBtn.disabled = true;
-    shareBtn.disabled = true;
-
-    try {
-      const res = await fetch(sheetBaseURL + sheetName);
-      const data = await res.json();
-
-      const filtered = data.filter(row =>
-        String(row['رقم الجلوس']).trim() === seatNumber
-      );
-
-      if (filtered.length === 0) {
-        resultArea.innerHTML = `<div class='alert alert-warning text-dark'>رقم الجلوس غير صحيح أو لا توجد نتيجة.</div>`;
-      } else {
-        filtered.forEach(row => {
-          resultArea.innerHTML += formatResultCard(row);
-        });
-        printBtn.disabled = false;
-        shareBtn.disabled = false;
-      }
-    } catch (error) {
-      resultArea.innerHTML = `<div class='alert alert-danger text-dark'>حدث خطأ أثناء تحميل البيانات.</div>`;
-    } finally {
-      showLoading(false);
-    }
-  }
-
-  printBtn.addEventListener('click', () => {
-    const printContents = document.getElementById('resultCard');
-    if (printContents) {
-      const originalContents = document.body.innerHTML;
-      document.body.innerHTML = printContents.outerHTML;
-      window.print();
-      document.body.innerHTML = originalContents;
-      window.location.reload();
-    }
-  });
-
-  shareBtn.addEventListener('click', () => {
-    const card = document.getElementById('resultCard');
-    if (!card) return alert('لا توجد نتيجة للمشاركة.');
-
-    const name = card.querySelector('h5').innerText;
-    let details = '';
-    card.querySelectorAll('tr').forEach((tr, index) => {
-      if (index === 0) return; // skip header
-      const tds = tr.querySelectorAll('td');
-      if (tds.length === 3) {
-        details += `${tds[0].innerText}: ${tds[1].innerText} (${tds[2].innerText})\n`;
-      }
-    });
-
-    const text = encodeURIComponent(`${name}\n${details}\nنتيجة مدرسة عرب الرمل الإعدادية`);
-    const whatsappURL = `https://wa.me/?text=${text}`;
-    const twitterURL = `https://twitter.com/intent/tweet?text=${text}`;
-    const facebookURL = `https://www.facebook.com/sharer/sharer.php?u=&quote=${text}`;
-
-    const shareWindow = window.open('', '_blank', 'width=600,height=400');
-    shareWindow.document.write(`
-      <h4 style="font-family: 'Cairo', sans-serif; color:#764ba2;">مشاركة النتيجة عبر:</h4>
-      <ul style="font-family: 'Cairo', sans-serif; list-style:none; padding-left:0;">
-        <li><a href="${whatsappURL}" target="_blank" style="color:#25D366; text-decoration:none; font-weight:bold;">واتساب</a></li>
-        <li><a href="${twitterURL}" target="_blank" style="color:#1DA1F2; text-decoration:none; font-weight:bold;">تويتر</a></li>
-        <li><a href="${facebookURL}" target="_blank" style="color:#1877F2; text-decoration:none; font-weight:bold;">فيسبوك</a></li>
-      </ul>
-    `);
-  });
-
   document.querySelectorAll('[data-grade]').forEach(tab => {
-    tab.addEventListener('click', (e) => {
+    tab.addEventListener('click', e => {
       e.preventDefault();
       document.querySelectorAll('[data-grade]').forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
       currentSheet = tab.getAttribute('data-grade');
-      resultArea.innerHTML = '';
-      printBtn.disabled = true;
-      shareBtn.disabled = true;
+      document.getElementById('resultArea').innerHTML = '';
     });
   });
 
   document.getElementById('searchBtn').addEventListener('click', () => {
     const seatNumber = document.getElementById('searchInput').value.trim();
-    if (seatNumber) {
-      fetchAndDisplay(currentSheet, seatNumber);
-    } else {
-      resultArea.innerHTML = `<div class='alert alert-info text-dark'>من فضلك أدخل رقم الجلوس.</div>`;
-    }
+    if (seatNumber) fetchAndDisplay(currentSheet, seatNumber);
   });
 
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js')
-      .then(() => console.log('Service Worker Registered'));
+  async function fetchAndDisplay(sheetName, seatNumber) {
+    const resultArea = document.getElementById('resultArea');
+    const spinner = document.getElementById('loadingSpinner');
+    resultArea.innerHTML = '';
+    spinner.style.display = 'flex';
+
+    try {
+      const res = await fetch(sheetBaseURL + sheetName);
+      const data = await res.json();
+      const row = data.find(r => String(r['رقم الجلوس']).trim() === seatNumber);
+
+      if (!row) {
+        resultArea.innerHTML = `<div class='alert alert-warning text-dark'>رقم الجلوس غير صحيح أو لا توجد نتيجة.</div>`;
+        return;
+      }
+
+      const subjects = Object.keys(row).filter(key => !key.startsWith('تقدير') && key !== 'الاسم' && key !== 'رقم الجلوس' && key !== 'الكود السري');
+
+      let html = `<div class="result-card"><h5>${row['الاسم']} - رقم الجلوس ${row['رقم الجلوس']}</h5><table class="table table-bordered mt-3 text-center"><thead><tr><th>المادة</th><th>الدرجة</th><th>التقدير</th></tr></thead><tbody>`;
+
+      subjects.forEach(subject => {
+        const gradeKey = 'تقدير ' + subject;
+        html += `<tr><td>${subject}</td><td>${row[subject]}</td><td>${row[gradeKey] || ''}</td></tr>`;
+      });
+
+      html += '</tbody></table></div>';
+      resultArea.innerHTML = html;
+    } catch (err) {
+      resultArea.innerHTML = `<div class='alert alert-danger text-dark'>حدث خطأ أثناء تحميل البيانات.</div>`;
+    } finally {
+      spinner.style.display = 'none';
+    }
   }
 </script>
-
 </body>
 </html>
