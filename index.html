@@ -59,6 +59,7 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
+    /* شريط الأخبار */
     .news-ticker {
       background-color: #ffc107;
       color: #000;
@@ -69,15 +70,6 @@
 
     .news-ticker marquee {
       direction: rtl;
-    }
-
-    .gallery img {
-      border-radius: 10px;
-      transition: transform 0.3s;
-    }
-
-    .gallery img:hover {
-      transform: scale(1.03);
     }
   </style>
 </head>
@@ -102,80 +94,49 @@
     </div>
   </nav>
 
-  <!-- شريط الأخبار -->
+  <!-- شريط الأخبار المتحرك -->
   <div class="news-ticker">
     <marquee behavior="scroll" direction="right" scrollamount="5" onmouseover="this.stop();" onmouseout="this.start();">
-      📢 إعلان هام: الآن نتيجة الصف الأول والثاني الإعدادي  | 📞 للتواصل مع الإدارة يرجى زيارة صفحة تواصل معنا.
+      📢 إعلان هام: الان نتيجة الصف الاول والثانى الاعدادى  | 📞 للتواصل مع الإدارة يرجى زيارة صفحة تواصل معنا.
     </marquee>
   </div>
 
-  <!-- Hero -->
+  <!-- Hero Section -->
   <div class="container text-center">
     <div class="hero mt-5">
       <h1 class="display-5 fw-bold">مرحبًا بكم في مدرسة عرب الرمل الإعدادية المشتركة</h1>
       <p class="lead mt-3">📣 أحدث الأخبار، نتائج الطلاب، والتواصل مع الإدارة بسهولة</p>
     </div>
 
-    <!-- الأخبار -->
+    <!-- News Section -->
     <div class="mt-5 text-start">
       <h3 class="mb-3">📰 أحدث الأخبار</h3>
       <ul class="list-group">
-        <li class="list-group-item">
-          <a href="results.html" style="text-decoration: none; color: inherit;">
-            📊 الآن نتيجة الصف الأول والثاني الإعدادي - اضغط هنا لعرض النتيجة
-          </a>
-        </li>
-        <li class="list-group-item">📅 بدء امتحانات نهاية العام للصف الأول والثاني الإعدادي يوم السبت 24 مايو</li>
-        <li class="list-group-item">📚 بدء امتحانات نهاية العام للصف الثالث الإعدادي يوم السبت 31 مايو</li>
-      </ul>
-    </div>
+  <li class="list-group-item">
+    <a href="results.html" style="text-decoration: none; color: inherit;">
+      📊 الآن نتيجة الصف الأول والثاني الإعدادي - اضغط هنا لعرض النتيجة
+    </a>
+  </li>
+  <li class="list-group-item">📅 بدء امتحانات نهاية العام للصف الاول والثانى الاعدادى يوم السبت 24 مايو</li>
+  <li class="list-group-item">📚 بدء امتحانات نهاية العام للصف الثالث الاعدادى يوم السبت 31 مايو</li>
+</ul>
 
-    <!-- أوائل الصف الثالث -->
-    <div class="mt-5 text-start">
-      <h3 class="mb-3">🏆 أوائل الصف الثالث الإعدادي 2024</h3>
-      <div class="row row-cols-1 row-cols-md-3 g-4 gallery">
-        <div class="col"><img src="images/top1.jpg" class="img-fluid shadow-sm" alt="الطالب الأول"></div>
-        <div class="col"><img src="images/top2.jpg" class="img-fluid shadow-sm" alt="الطالب الثاني"></div>
-        <div class="col"><img src="images/top3.jpg" class="img-fluid shadow-sm" alt="الطالب الثالث"></div>
-      </div>
     </div>
-
-    <!-- حفل التكريم -->
-    <div class="mt-5 text-start">
-      <h3 class="mb-3">🎉 صور من حفل تكريم الأوائل</h3>
-      <div class="row row-cols-1 row-cols-md-3 g-4 gallery">
-        <div class="col"><img src="images/celebration1.jpg" class="img-fluid shadow-sm" alt="تكريم 1"></div>
-        <div class="col"><img src="images/celebration2.jpg" class="img-fluid shadow-sm" alt="تكريم 2"></div>
-        <div class="col"><img src="images/celebration3.jpg" class="img-fluid shadow-sm" alt="تكريم 3"></div>
-      </div>
-    </div>
-
-    <!-- أنشطة المدرسة -->
-    <div class="mt-5 text-start mb-5">
-      <h3 class="mb-3">📸 صور أنشطة المدرسة</h3>
-      <div class="row row-cols-1 row-cols-md-3 g-4 gallery">
-        <div class="col"><img src="images/activity1.jpg" class="img-fluid shadow-sm" alt="نشاط 1"></div>
-        <div class="col"><img src="images/activity2.jpg" class="img-fluid shadow-sm" alt="نشاط 2"></div>
-        <div class="col"><img src="images/activity3.jpg" class="img-fluid shadow-sm" alt="نشاط 3"></div>
-        <div class="col"><img src="images/activity4.jpg" class="img-fluid shadow-sm" alt="نشاط 4"></div>
-        <div class="col"><img src="images/activity5.jpg" class="img-fluid shadow-sm" alt="نشاط 5"></div>
-        <div class="col"><img src="images/activity6.jpg" class="img-fluid shadow-sm" alt="نشاط 6"></div>
-      </div>
-    </div>
-
   </div>
 
-  <!-- Footer -->
-  <footer class="text-center">
-    <p>&copy; 2025 مدرسة عرب الرمل الاعدادية المشتركة. جميع الحقوق محفوظة.</p>
-    <p>👥 عدد زوار الموقع: <span id="visitorCount">جارٍ التحميل...</span></p>
-  </footer>
+<footer class="text-center">
+  <p>&copy; 2025 مدرسة عرب الرمل الاعدادية المشتركة. جميع الحقوق محفوظة.</p>
+  <p>👥 عدد زوار الموقع: <span id="visitorCount">جارٍ التحميل...</span></p>
+</footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    let fakeCount = Math.floor(1000 + Math.random() * 500);
-    document.getElementById('visitorCount').innerText = fakeCount.toLocaleString();
-  </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  // عداد شكلي فقط، يزيد بشكل وهمي
+  let fakeCount = Math.floor(1000 + Math.random() * 500); // يبدأ من 1000 إلى 1500
+  document.getElementById('visitorCount').innerText = fakeCount.toLocaleString();
+</script>
+
 
 </body>
 </html>
