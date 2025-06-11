@@ -88,14 +88,46 @@
   }
 
   function formatResultCard(row) {
-    let result = `<div class="result-card" id="resultCard"><h5>${row['الاسم'] || 'بدون اسم'} - رقم الجلوس ${row['رقم الجلوس'] || 'غير محدد'}</h5><ul>`;
-    for (let key in row) {
-      if (key !== 'الاسم' && key !== 'رقم الجلوس' && key !== 'الكود السري') {
-        result += `<li><strong>${key}:</strong> ${row[key]}</li>`;
-      }
-    }
-    result += '</ul></div>';
-    return result;
+    const name = row['الاسم'] || 'بدون اسم';
+    const seat = row['رقم الجلوس'] || 'غير محدد';
+
+    const subjects = Object.keys(row).filter(key =>
+      key !== 'الاسم' &&
+      key !== 'رقم الجلوس' &&
+      key !== 'الكود السري' &&
+      !key.includes('تقدير')
+    );
+
+    let tableRows = '';
+    subjects.forEach(subject => {
+      const mark = row[subject] || '';
+      const grade = row[`تقدير ${subject}`] || '';
+      tableRows += `
+        <tr>
+          <td>${subject}</td>
+          <td>${mark}</td>
+          <td>${grade}</td>
+        </tr>`;
+    });
+
+    return `
+      <div class="result-card" id="resultCard">
+        <h5>${name} - رقم الجلوس ${seat}</h5>
+        <div class="table-responsive">
+          <table class="table table-bordered text-center">
+            <thead class="table-light">
+              <tr>
+                <th>المادة</th>
+                <th>الدرجة</th>
+                <th>التقدير</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${tableRows}
+            </tbody>
+          </table>
+        </div>
+      </div>`;
   }
 
   async function fetchAndDisplay(sheetName, seatNumber = '') {
@@ -145,8 +177,12 @@
 
     const name = card.querySelector('h5').innerText;
     let details = '';
-    card.querySelectorAll('li').forEach(li => {
-      details += `${li.innerText}\n`;
+    card.querySelectorAll('tr').forEach((tr, index) => {
+      if (index === 0) return; // skip header
+      const tds = tr.querySelectorAll('td');
+      if (tds.length === 3) {
+        details += `${tds[0].innerText}: ${tds[1].innerText} (${tds[2].innerText})\n`;
+      }
     });
 
     const text = encodeURIComponent(`${name}\n${details}\nنتيجة مدرسة عرب الرمل الإعدادية`);
