@@ -11,38 +11,48 @@
       font-family: 'Cairo', sans-serif;
       margin: 0;
       padding-top: 80px;
-      background: linear-gradient(135deg, #e0f7fa, #e1bee7);
+      background: linear-gradient(to right, #f0f4ff, #fce4ec);
       color: #333;
     }
 
     .navbar {
-      background: linear-gradient(to left, #4e54c8, #8f94fb);
+      background: linear-gradient(to left, #0d47a1, #1976d2);
       box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
 
     .navbar-brand img {
-      height: 30px;
+      height: 40px;
       margin-left: 10px;
     }
 
     .hero {
-      background: url('images/activity1.webp') center/cover no-repeat;
-      height: 60vh;
+      background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('images/activity1.webp') center/cover no-repeat;
+      height: 45vh;
       color: white;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
+      text-align: center;
+      padding: 2rem;
     }
 
     .hero h1 {
       font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #fff;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      font-weight: 400;
+      color: #f8f8f8;
     }
 
     .section-title {
       font-weight: bold;
-      font-size: 1.6rem;
+      font-size: 1.8rem;
       margin-top: 40px;
       margin-bottom: 20px;
     }
@@ -55,20 +65,32 @@
 
     .gallery img {
       width: 100%;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-      transition: transform 0.3s;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      transition: transform 0.4s ease;
     }
 
     .gallery img:hover {
-      transform: scale(1.05);
+      transform: scale(1.08);
+    }
+
+    .ticker {
+      background-color: #ffc107;
+      font-weight: bold;
+      font-size: 1.1rem;
+      padding: 8px 0;
+    }
+
+    .ticker a {
+      color: #000;
+      text-decoration: none;
     }
 
     footer {
       background: #2c3e50;
       color: white;
       padding: 20px 0;
-      margin-top: 40px;
+      margin-top: 50px;
       text-align: center;
     }
   </style>
@@ -79,10 +101,9 @@
 <nav class="navbar navbar-expand-lg fixed-top">
   <div class="container">
     <a class="navbar-brand d-flex align-items-center" href="#">
-  <img src="images/logo.jpg" alt="Logo" width="40" height="40" class="me-2 rounded-circle">
-  مدرسة عرب الرمل الاعدادية المشتركة
-</a>
-
+      <img src="images/logo.jpg" alt="Logo" class="me-2 rounded-circle">
+      مدرسة عرب الرمل الإعدادية المشتركة
+    </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -97,17 +118,18 @@
     </div>
   </div>
 </nav>
+
 <!-- شريط الأخبار -->
-<div class="bg-warning text-dark py-2 px-3 fw-bold text-center">
+<div class="ticker text-center">
   <marquee direction="right" scrollamount="5" onmouseover="this.stop();" onmouseout="this.start();">
-    📢 <a href="results.html" style="color: #000; text-decoration: none;">الآن نتيجة الصف الثالث الإعدادي - اضغط هنا لعرض النتيجة</a>
+    📢 <a href="results.html">الآن نتيجة الصف الثالث الإعدادي - اضغط هنا لعرض النتيجة</a>
   </marquee>
 </div>
 
 <!-- Hero Section -->
-<div class="hero text-center">
+<div class="hero">
   <h1>مرحبًا بكم في مدرسة عرب الرمل الإعدادية</h1>
-  <p class="lead">بيئة تعليمية ملهمة وإنجازات نفخر بها</p>
+  <p>بيئة تعليمية ملهمة وإنجازات نفخر بها</p>
 </div>
 
 <!-- قسم صور الأنشطة -->
