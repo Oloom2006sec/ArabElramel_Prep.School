@@ -1,16 +1,14 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="UTF-8" />
   <title>نتائج الطلاب</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet" />
   <style>
     body {
       padding-top: 80px;
-      padding-right: 20px;
-      padding-left: 20px;
       font-family: 'Cairo', sans-serif;
       background: #f8f9fa;
     }
@@ -32,13 +30,7 @@
   </style>
 </head>
 <body>
-  <style>
-  .page-content {
-    padding-top: 100px; /* يجعل الكلام ينزل لتحت */
-  }
-</style>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg fixed-top">
   <div class="container">
@@ -61,148 +53,30 @@
   </div>
 </nav>
 
-
-<div class="container text-center result-header">
+<div class="container d-flex flex-column justify-content-center align-items-center text-center" style="min-height: 80vh;">
   <h2 class="mb-4">📊 نتائج الطلاب</h2>
-</div>
 
-
-  <ul class="nav nav-tabs mb-3 justify-content-center" id="gradeTabs">
+  <ul class="nav nav-tabs mb-3 justify-content-center fw-bold fs-5" id="gradeTabs">
     <li class="nav-item"><a class="nav-link active" data-grade="أولى" href="#">الصف الأول الإعدادي</a></li>
     <li class="nav-item"><a class="nav-link" data-grade="ثانية" href="#">الصف الثاني الإعدادي</a></li>
     <li class="nav-item"><a class="nav-link" data-grade="ثالثة" href="#">الصف الثالث الإعدادي</a></li>
   </ul>
 
-  <input type="text" id="searchInput" class="form-control mb-2" placeholder="اكتب رقم الجلوس">
-  <button id="searchBtn" class="btn btn-primary w-100 mb-3">عرض النتيجة</button>
+  <input type="text" id="searchInput" class="form-control mb-2 w-100 w-md-50" placeholder="اكتب رقم الجلوس" style="max-width: 400px;">
+  <button id="searchBtn" class="btn btn-primary w-100 w-md-50 mb-3" style="max-width: 400px;">عرض النتيجة</button>
 
-  <div id="resultArea"></div>
+  <div id="resultArea" class="w-100"></div>
 
-  <div class="btn-group btn-group-custom d-none" role="group" id="actionButtons">
+  <div class="btn-group btn-group-custom d-none mt-3" role="group" id="actionButtons">
     <button id="printBtn" class="btn btn-success">🖨️ طباعة النتيجة</button>
     <button id="shareBtn" class="btn btn-info">📤 مشاركة</button>
     <a href="index.html" class="btn btn-secondary">🏠 الصفحة الرئيسية</a>
   </div>
 </div>
 
-<script>
-  const sheetBaseURL = 'https://opensheet.elk.sh/1y7NekqhM3tJ8FCQFiBKtJpOwtJrfY13rtiWF6M-Ttcg/';
-  let currentSheet = 'أولى';
-
-  const resultArea = document.getElementById('resultArea');
-  const printBtn = document.getElementById('printBtn');
-  const shareBtn = document.getElementById('shareBtn');
-  const actionButtons = document.getElementById('actionButtons');
-
-  function formatResultCard(row) {
-    let html = `<div class="result-card" id="resultCard">
-      <h5>الاسم: ${row['الاسم'] || ''}</h5>
-      <h6>رقم الجلوس: ${row['رقم الجلوس'] || ''}</h6>
-      <table class="table table-bordered mt-3">
-        <thead><tr><th>المادة</th><th>الدرجة</th><th>التقدير</th></tr></thead>
-        <tbody>`;
-
-    for (let key in row) {
-      if (key.startsWith("تقدير")) continue;
-      if (["الاسم", "رقم الجلوس", "الكود السري"].includes(key)) continue;
-
-      const gradeKey = `تقدير ${key}`;
-      html += `<tr>
-        <td>${key}</td>
-        <td>${row[key]}</td>
-        <td>${row[gradeKey] || ''}</td>
-      </tr>`;
-    }
-
-    html += `</tbody></table></div>`;
-    return html;
-  }
-
-  async function fetchAndDisplay(sheetName, seatNumber = '') {
-    resultArea.innerHTML = '';
-    actionButtons.classList.add('d-none');
-
-    try {
-      const res = await fetch(sheetBaseURL + sheetName);
-      const data = await res.json();
-
-      const filtered = data.filter(row =>
-        String(row['رقم الجلوس']).trim() === seatNumber
-      );
-
-      if (filtered.length === 0) {
-        resultArea.innerHTML = `<div class='alert alert-warning'>رقم الجلوس غير صحيح أو لا توجد نتيجة.</div>`;
-      } else {
-        resultArea.innerHTML = formatResultCard(filtered[0]);
-        actionButtons.classList.remove('d-none');
-      }
-    } catch {
-      resultArea.innerHTML = `<div class='alert alert-danger'>حدث خطأ أثناء تحميل البيانات.</div>`;
-    }
-  }
-
-  document.querySelectorAll('[data-grade]').forEach(tab => {
-    tab.addEventListener('click', (e) => {
-      e.preventDefault();
-      document.querySelectorAll('[data-grade]').forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      currentSheet = tab.getAttribute('data-grade');
-      resultArea.innerHTML = '';
-      actionButtons.classList.add('d-none');
-    });
-  });
-
-  document.getElementById('searchBtn').addEventListener('click', () => {
-    const seatNumber = document.getElementById('searchInput').value.trim();
-    if (seatNumber) {
-      fetchAndDisplay(currentSheet, seatNumber);
-    } else {
-      resultArea.innerHTML = `<div class='alert alert-info'>من فضلك أدخل رقم الجلوس.</div>`;
-    }
-  });
-
-  printBtn.addEventListener('click', () => {
-    const printContents = document.getElementById('resultCard');
-    if (printContents) {
-      const originalContents = document.body.innerHTML;
-      document.body.innerHTML = printContents.outerHTML;
-      window.print();
-      document.body.innerHTML = originalContents;
-      window.location.reload();
-    }
-  });
-
-  shareBtn.addEventListener('click', () => {
-    const card = document.getElementById('resultCard');
-    if (!card) return;
-
-    const name = card.querySelector('h5').innerText;
-    const seat = card.querySelector('h6').innerText;
-    let details = '';
-    card.querySelectorAll('table tbody tr').forEach(tr => {
-      details += Array.from(tr.children).map(td => td.innerText).join(' - ') + '\n';
-    });
-
-    const text = encodeURIComponent(`${name}\n${seat}\n${details}`);
-    const wa = `https://wa.me/?text=${text}`;
-    const fb = `https://www.facebook.com/sharer/sharer.php?u=&quote=${text}`;
-    const tw = `https://twitter.com/intent/tweet?text=${text}`;
-
-    const win = window.open('', '_blank', 'width=600,height=400');
-    win.document.write(`
-      <h4>مشاركة النتيجة عبر:</h4>
-      <ul style="list-style:none; font-family:Arial; text-align:right;">
-        <li><a href="${wa}" target="_blank">📱 واتساب</a></li>
-        <li><a href="${fb}" target="_blank">📘 فيسبوك</a></li>
-        <li><a href="${tw}" target="_blank">🐦 تويتر</a></li>
-      </ul>
-    `);
-  });
-</script>
-<footer class="text-center">
+<footer class="text-center mt-4">
   &copy; 2025 مدرسة عرب الرمل الاعدادية المشتركة. جميع الحقوق محفوظة.
 </footer>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
