@@ -1,154 +1,212 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta charset="UTF-8">
-  <title>مدرسة عرب الرمل الإعدادية المشتركة</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Cairo', sans-serif;
-      margin: 0;
-      padding-top: 80px;
-      background: linear-gradient(to right, #f0f4ff, #fce4ec);
-      color: #333;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مدرسة عرب الرمل الإعدادية المشتركة</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #1976d2;
+            --secondary-color: #0d47a1;
+            --light-bg-color: #f0f4ff;
+            --dark-bg-color: #fce4ec;
+            --text-color: #333;
+        }
 
-    .navbar {
-      background: linear-gradient(to left, #0d47a1, #1976d2);
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    }
+        body {
+            font-family: 'Cairo', sans-serif;
+            margin: 0;
+            padding-top: 80px;
+            background: linear-gradient(to right, var(--light-bg-color), var(--dark-bg-color));
+            color: var(--text-color);
+        }
 
-    .navbar-brand img {
-      height: 40px;
-      margin-left: 10px;
-    }
+        .navbar {
+            background: linear-gradient(to left, var(--secondary-color), var(--primary-color));
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
 
-    .hero {
-      background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('images/activity1.webp') center/cover no-repeat;
-      height: 45vh;
-      color: white;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 2rem;
-    }
+        .navbar-brand img {
+            height: 40px;
+            margin-left: 10px;
+        }
 
-    .hero h1 {
-      font-size: 2.5rem;
-      font-weight: 700;
-      margin-bottom: 10px;
-      color: #fff;
-    }
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('images/activity3.webp') center/cover no-repeat;
+            height: 45vh;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            animation: fadeIn 1.5s ease-in-out;
+        }
 
-    .hero p {
-      font-size: 1.2rem;
-      font-weight: 400;
-      color: #f8f8f8;
-    }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
 
-    .section-title {
-      font-weight: bold;
-      font-size: 1.8rem;
-      margin-top: 40px;
-      margin-bottom: 20px;
-    }
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
 
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 15px;
-    }
+        .hero p {
+            font-size: 1.2rem;
+            font-weight: 400;
+        }
+        
+        /* news-bar-container */
+        .news-bar-container {
+            background-color: #ffc107;
+            padding: 10px 0;
+            text-align: center;
+        }
 
-    .gallery img {
-      width: 100%;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      transition: transform 0.4s ease;
-    }
+        .news-bar-container p {
+            margin: 0;
+            font-weight: bold;
+        }
 
-    .gallery img:hover {
-      transform: scale(1.08);
-    }
+        .news-bar-container a {
+            color: #000;
+            text-decoration: none;
+        }
 
-    .ticker {
-      background-color: #ffc107;
-      font-weight: bold;
-      font-size: 1.1rem;
-      padding: 8px 0;
-    }
+        .section-title {
+            font-weight: bold;
+            font-size: 1.8rem;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 5px;
+            display: inline-block;
+        }
 
-    .ticker a {
-      color: #000;
-      text-decoration: none;
-    }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
 
-    footer {
-      background: #2c3e50;
-      color: white;
-      padding: 20px 0;
-      margin-top: 50px;
-      text-align: center;
-    }
-  </style>
+        .gallery img {
+            width: 100%;
+            height: 200px; /* Fixed height for consistency */
+            object-fit: cover; /* Ensures images fill the space without distortion */
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .gallery img:hover {
+            transform: scale(1.08);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+        }
+
+        footer {
+            background: #2c3e50;
+            color: white;
+            padding: 20px 0;
+            margin-top: 50px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
 
-<!-- Navbar -->
 <nav class="navbar navbar-expand-lg fixed-top">
-  <div class="container">
-    <a class="navbar-brand d-flex align-items-center" href="#">
-      <img src="images/logo.jpg" alt="Logo" class="me-2 rounded-circle">
-      مدرسة عرب الرمل الإعدادية المشتركة
-    </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-      <ul class="navbar-nav">
-        <li class="nav-item"><a class="nav-link active" href="index.html">الرئيسية</a></li>
-        <li class="nav-item"><a class="nav-link" href="news.html">الأخبار</a></li>
-        <li class="nav-item"><a class="nav-link" href="results.html">النتائج</a></li>
-        <li class="nav-item"><a class="nav-link" href="contact.html">تواصل معنا</a></li>
-        <li class="nav-item"><a class="nav-link" href="about.html">عن المدرسة</a></li>
-      </ul>
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="#">
+            <img src="images/logo.jpg" alt="Logo" class="me-2 rounded-circle">
+            مدرسة عرب الرمل الإعدادية المشتركة
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link active" href="index.html">الرئيسية</a></li>
+                <li class="nav-item"><a class="nav-link" href="news.html">الأخبار</a></li>
+                <li class="nav-item"><a class="nav-link" href="results.html">النتائج</a></li>
+                <li class="nav-item"><a class="nav-link" href="contact.html">تواصل معنا</a></li>
+                <li class="nav-item"><a class="nav-link" href="about.html">عن المدرسة</a></li>
+            </ul>
+        </div>
     </div>
-  </div>
 </nav>
 
-<!-- شريط الأخبار -->
-  <<div class="news-bar bg-warning text-dark py-2 px-3 fw-bold text-center">
-  <marquee direction="right" scrollamount="5" onmouseover="this.stop();" onmouseout="this.start();">
-    📢 <a href="results.html" style="color: #000; text-decoration: none;">الآن نتيجة الصف الثالث الإعدادي - اضغط هنا لعرض النتيجة</a>
-  </marquee>
+<div class="news-bar-container">
+    <p>
+        <i class="fas fa-bullhorn"></i>
+        الآن نتيجة الصف الثالث الإعدادي -
+        <a href="results.html">اضغط هنا لعرض النتيجة</a>
+    </p>
 </div>
 
-
-<!-- Hero Section -->
 <div class="hero">
-  <h1>مرحبًا بكم في مدرسة عرب الرمل الإعدادية</h1>
-  <p>بيئة تعليمية ملهمة وإنجازات نفخر بها</p>
+    <h1>مرحبًا بكم في مدرسة عرب الرمل الإعدادية</h1>
+    <p>بيئة تعليمية ملهمة وإنجازات نفخر بها</p>
 </div>
 
-<!-- قسم صور الأنشطة -->
-<div class="container">
-  <h2 class="section-title text-center">📸 صور الأنشطة المدرسية</h2>
-  <div class="gallery">
-    <img src="images/activity1.webp" alt="نشاط 1">
-    <img src="images/activity2.webp" alt="نشاط 2">
-    <img src="images/activity3.webp" alt="نشاط 3">
-    <img src="images/activity4.webp" alt="نشاط 4">
-    <img src="images/activity5.webp" alt="نشاط 5">
-    <img src="images/activity6.webp" alt="نشاط 6">
-  </div>
-</div>
+<main class="container">
+    <section id="recent-news">
+        <h2 class="section-title text-center">أحدث الأخبار <i class="fas fa-newspaper"></i></h2>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <img src="images/news1.webp" class="card-img-top" alt="خبر 1">
+                    <div class="card-body">
+                        <h5 class="card-title">المدرسة تفوز في مسابقة العلوم</h5>
+                        <p class="card-text">تهانينا لفريقنا على هذا الإنجاز الرائع.</p>
+                        <a href="news.html" class="btn btn-primary">اقرأ المزيد</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <img src="images/news2.webp" class="card-img-top" alt="خبر 2">
+                    <div class="card-body">
+                        <h5 class="card-title">يوم رياضي مفتوح للطلاب</h5>
+                        <p class="card-text">صور من فعاليات اليوم الرياضي الذي أقيم الأسبوع الماضي.</p>
+                        <a href="news.html" class="btn btn-primary">اقرأ المزيد</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <img src="images/news3.webp" class="card-img-top" alt="خبر 3">
+                    <div class="card-body">
+                        <h5 class="card-title">ورشة عمل عن الذكاء الاصطناعي</h5>
+                        <p class="card-text">ورشة عمل لتدريب الطلاب على أساسيات الذكاء الاصطناعي.</p>
+                        <a href="news.html" class="btn btn-primary">اقرأ المزيد</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="gallery-section">
+        <h2 class="section-title text-center">📸 صور الأنشطة المدرسية</h2>
+        <div class="gallery">
+            <img src="images/activity1.webp" alt="نشاط 1">
+            <img src="images/activity2.webp" alt="نشاط 2">
+            <img src="images/activity3.webp" alt="نشاط 3">
+            <img src="images/activity4.webp" alt="نشاط 4">
+            <img src="images/activity5.webp" alt="نشاط 5">
+            <img src="images/activity6.webp" alt="نشاط 6">
+        </div>
+    </section>
+</main>
 
 <footer>
-  <p>&copy; 2025 مدرسة عرب الرمل الإعدادية. جميع الحقوق محفوظة.</p>
+    <p>&copy; 2025 مدرسة عرب الرمل الإعدادية. جميع الحقوق محفوظة.</p>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
