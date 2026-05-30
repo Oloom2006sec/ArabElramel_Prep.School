@@ -2,155 +2,144 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>مدرسة عرب الرمل الإعدادية المشتركة</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="الموقع الرسمي لمدرسة عرب الرمل الإعدادية المشتركة: أخبار المدرسة، النتائج، الأنشطة، وطرق التواصل.">
+  <title>مدرسة عرب الرمل الإعدادية المشتركة</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Cairo', sans-serif;
-      margin: 0;
-      padding-top: 80px;
-      background: linear-gradient(to right, #f0f4ff, #fce4ec);
-      color: #333;
-    }
-
-    .navbar {
-      background: linear-gradient(to left, #0d47a1, #1976d2);
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    }
-
-    .navbar-brand img {
-      height: 40px;
-      margin-left: 10px;
-    }
-
-    .hero {
-      background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('images/activity1.webp') center/cover no-repeat;
-      height: 45vh;
-      color: white;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 2rem;
-    }
-
-    .hero h1 {
-      font-size: 2.5rem;
-      font-weight: 700;
-      margin-bottom: 10px;
-      color: #fff;
-    }
-
-    .hero p {
-      font-size: 1.2rem;
-      font-weight: 400;
-      color: #f8f8f8;
-    }
-
-    .section-title {
-      font-weight: bold;
-      font-size: 1.8rem;
-      margin-top: 40px;
-      margin-bottom: 20px;
-    }
-
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 15px;
-    }
-
-    .gallery img {
-      width: 100%;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      transition: transform 0.4s ease;
-    }
-
-    .gallery img:hover {
-      transform: scale(1.08);
-    }
-
-    .ticker {
-      background-color: #ffc107;
-      font-weight: bold;
-      font-size: 1.1rem;
-      padding: 8px 0;
-    }
-
-    .ticker a {
-      color: #000;
-      text-decoration: none;
-    }
-
-    footer {
-      background: #2c3e50;
-      color: white;
-      padding: 20px 0;
-      margin-top: 50px;
-      text-align: center;
-    }
-  </style>
+  <link href="style.css" rel="stylesheet">
 </head>
 <body>
+  <header class="site-header">
+    <nav class="navbar navbar-expand-lg">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="index.html">
+          <img src="images/logo.jpg" alt="شعار مدرسة عرب الرمل" class="brand-logo">
+          <span>مدرسة عرب الرمل الإعدادية المشتركة</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-label="فتح القائمة">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+          <ul class="navbar-nav align-items-lg-center gap-lg-1">
+            <li class="nav-item"><a class="nav-link active" href="index.html">الرئيسية</a></li>
+            <li class="nav-item"><a class="nav-link" href="news.html">الأخبار</a></li>
+            <li class="nav-item"><a class="nav-link" href="results.html">النتائج</a></li>
+            <li class="nav-item"><a class="nav-link" href="attendance.html">الحضور</a></li>
+            <li class="nav-item"><a class="nav-link" href="top students.html">الأوائل</a></li>
+            <li class="nav-item"><a class="nav-link" href="about.html">عن المدرسة</a></li>
+            <li class="nav-item"><a class="nav-link" href="contact.html">تواصل معنا</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg fixed-top">
-  <div class="container">
-    <a class="navbar-brand d-flex align-items-center" href="#">
-      <img src="images/logo.jpg" alt="Logo" class="me-2 rounded-circle">
-      مدرسة عرب الرمل الإعدادية المشتركة
-    </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-      <ul class="navbar-nav">
-        <li class="nav-item"><a class="nav-link active" href="index.html">الرئيسية</a></li>
-        <li class="nav-item"><a class="nav-link" href="news.html">الأخبار</a></li>
-        <li class="nav-item"><a class="nav-link" href="results.html">النتائج</a></li>
-        <li class="nav-item"><a class="nav-link" href="contact.html">تواصل معنا</a></li>
-        <li class="nav-item"><a class="nav-link" href="about.html">عن المدرسة</a></li>
-      </ul>
+  <main>
+    <section class="hero">
+      <div class="hero-inner">
+        <span class="eyebrow">تعليم يليق بالمستقبل</span>
+        <h1>مدرسة عرب الرمل الإعدادية المشتركة</h1>
+        <p>بيئة تعليمية آمنة ومنظمة، تجمع بين التحصيل الدراسي، بناء الشخصية، والأنشطة التي تكشف قدرات الطلاب وتدعم تفوقهم.</p>
+        <div class="hero-actions">
+          <a class="btn-school btn-primary-school" href="results.html">عرض نتائج الطلاب</a>
+          <a class="btn-school btn-secondary-school" href="attendance.html">متابعة الحضور</a>
+          <a class="btn-school btn-secondary-school" href="about.html">تعرف على المدرسة</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="announcement">
+      <div class="container">
+        <a href="results.html">إعلان مهم: يمكن الاستعلام عن نتائج الطلاب برقم الجلوس من صفحة النتائج.</a>
+      </div>
     </div>
-  </div>
-</nav>
 
-<!-- شريط الأخبار -->
-  <<div class="news-bar bg-warning text-dark py-2 px-3 fw-bold text-center">
-  <marquee direction="right" scrollamount="5" onmouseover="this.stop();" onmouseout="this.start();">
-    📢 <a href="results.html" style="color: #000; text-decoration: none;">الآن نتيجة الصف الأول الاعدادى والثانى الاعدادى - اضغط هنا لعرض النتيجة</a>
-  </marquee>
-</div>
+    <section class="section">
+      <div class="container">
+        <div class="section-title text-center">
+          <span>لماذا عرب الرمل؟</span>
+          <h2>مدرسة تعمل بروح الفريق وتضع الطالب في المركز</h2>
+        </div>
+        <div class="row g-4">
+          <div class="col-md-4">
+            <article class="feature-card">
+              <div class="feature-icon">01</div>
+              <h3>متابعة تعليمية دقيقة</h3>
+              <p>اهتمام مستمر بمستوى الطلاب، دعم للمتعثرين، وتشجيع حقيقي للمتفوقين.</p>
+            </article>
+          </div>
+          <div class="col-md-4">
+            <article class="feature-card">
+              <div class="feature-icon">02</div>
+              <h3>أنشطة متوازنة</h3>
+              <p>مساحات للرياضة والفن والثقافة والعمل الجماعي داخل اليوم المدرسي.</p>
+            </article>
+          </div>
+          <div class="col-md-4">
+            <article class="feature-card">
+              <div class="feature-icon">03</div>
+              <h3>تواصل واضح</h3>
+              <p>قنوات مباشرة لمعرفة الأخبار والنتائج والتواصل مع إدارة المدرسة.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
 
+    <section class="section section-soft">
+      <div class="container">
+        <div class="section-title">
+          <span>من داخل المدرسة</span>
+          <h2>صور الأنشطة والفعاليات</h2>
+        </div>
+        <div class="gallery">
+          <img src="images/activity1.webp" alt="نشاط مدرسي داخل مدرسة عرب الرمل">
+          <img src="images/activity2.webp" alt="فعالية طلابية">
+          <img src="images/activity3.webp" alt="أنشطة تعليمية">
+          <img src="images/activity4.webp" alt="طلاب أثناء نشاط مدرسي">
+          <img src="images/activity5.webp" alt="جانب من فعاليات المدرسة">
+          <img src="images/activity6.webp" alt="نشاط جماعي للطلاب">
+        </div>
+      </div>
+    </section>
 
-<!-- Hero Section -->
-<div class="hero">
-  <h1>مرحبًا بكم في مدرسة عرب الرمل الإعدادية</h1>
-  <p>بيئة تعليمية ملهمة وإنجازات نفخر بها</p>
-</div>
+    <section class="section">
+      <div class="container">
+        <div class="row g-4 align-items-stretch">
+          <div class="col-lg-4">
+            <div class="stat-card">
+              <strong class="d-block display-6">3</strong>
+              <span>صفوف إعدادية تخدم الطلاب والطالبات</span>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="stat-card">
+              <strong class="d-block display-6">6+</strong>
+              <span>مسارات نشاط وصور توثق الحياة المدرسية</span>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="stat-card">
+              <strong class="d-block display-6">24/7</strong>
+              <span>موقع متاح للأخبار والنتائج ومعلومات التواصل</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
 
-<!-- قسم صور الأنشطة -->
-<div class="container">
-  <h2 class="section-title text-center">📸 صور الأنشطة المدرسية</h2>
-  <div class="gallery">
-    <img src="images/activity1.webp" alt="نشاط 1">
-    <img src="images/activity2.webp" alt="نشاط 2">
-    <img src="images/activity3.webp" alt="نشاط 3">
-    <img src="images/activity4.webp" alt="نشاط 4">
-    <img src="images/activity5.webp" alt="نشاط 5">
-    <img src="images/activity6.webp" alt="نشاط 6">
-  </div>
-</div>
+  <footer class="site-footer">
+    <div class="container d-flex flex-column flex-md-row justify-content-between gap-2">
+      <strong>مدرسة عرب الرمل الإعدادية المشتركة</strong>
+      <span>جميع الحقوق محفوظة © 2026</span>
+    </div>
+  </footer>
 
-<footer>
-  <p>&copy; 2025 مدرسة عرب الرمل الإعدادية. جميع الحقوق محفوظة.</p>
-</footer>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>إدارة الحضور - مدرسة عرب الرمل الإعدادية المشتركة</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+  <link href="style.css" rel="stylesheet">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="navbar navbar-expand-lg">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="index.html">
+          <img src="images/logo.jpg" alt="شعار المدرسة" class="brand-logo">
+          <span>مدرسة عرب الرمل الإعدادية المشتركة</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-label="فتح القائمة">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+          <ul class="navbar-nav align-items-lg-center gap-lg-1">
+            <li class="nav-item"><a class="nav-link" href="index.html">الرئيسية</a></li>
+            <li class="nav-item"><a class="nav-link" href="attendance.html">بوابة ولي الأمر</a></li>
+            <li class="nav-item"><a class="nav-link active" href="admin-attendance.html">إدارة الحضور</a></li>
+            <li class="nav-item"><a class="nav-link" href="contact.html">تواصل معنا</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <span class="eyebrow">لوحة الإدارة</span>
+        <h1>تسجيل الحضور واستخراج التنبيهات</h1>
+        <p>واجهة مخصصة لشؤون الطلاب لتسجيل الحالة اليومية، مراجعة نسب الغياب، وتجهيز رسائل متابعة لأولياء الأمور.</p>
+      </div>
+    </section>
+
+    <section class="content-band">
+      <div class="container">
+        <div class="row g-4">
+          <div class="col-lg-5">
+            <section class="attendance-panel">
+              <h2 class="h4 fw-bold mb-3">تسجيل حالة اليوم</h2>
+              <form id="adminAttendanceForm">
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label" for="adminStudent">الطالب</label>
+                    <select class="form-select" id="adminStudent"></select>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label" for="attendanceDate">التاريخ</label>
+                    <input class="form-control" type="date" id="attendanceDate" required>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label" for="attendanceStatus">الحالة</label>
+                    <select class="form-select" id="attendanceStatus">
+                      <option value="present">حاضر</option>
+                      <option value="late">متأخر</option>
+                      <option value="absent">غائب</option>
+                      <option value="excused">غياب بعذر</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label" for="attendanceNote">ملاحظة</label>
+                    <input class="form-control" id="attendanceNote" placeholder="اختياري">
+                  </div>
+                  <div class="col-12">
+                    <button class="btn-school btn-primary-school w-100" type="submit">حفظ الحالة</button>
+                  </div>
+                </div>
+              </form>
+              <div id="adminSaveAlert" class="alert alert-success d-none mt-3"></div>
+            </section>
+          </div>
+
+          <div class="col-lg-7">
+            <section class="attendance-panel">
+              <div class="d-flex flex-column flex-md-row justify-content-between gap-3 align-items-md-center mb-3">
+                <h2 class="h4 fw-bold mb-0">ملخص المدرسة</h2>
+                <button id="resetAttendanceDemo" class="btn btn-outline-danger btn-sm">إعادة بيانات التجربة</button>
+              </div>
+              <div id="adminAttendanceDashboard"></div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container d-flex flex-column flex-md-row justify-content-between gap-2">
+      <strong>مدرسة عرب الرمل الإعدادية المشتركة</strong>
+      <span>جميع الحقوق محفوظة © 2026</span>
+    </div>
+  </footer>
+
+  <script src="attendance-system.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

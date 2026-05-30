@@ -1,21 +1,34 @@
-const CACHE_NAME = 'arab-elramel-v1';
+const CACHE_NAME = 'arab-elramel-v3';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/results.html',
-  '/about.html',
-  '/contact.html',
-  '/news.html',
-  '/style.css',
-  '/manifest.json',
-  '/icon-192.png',
-  '/icon-512.png'
+  'index.html',
+  'results.html',
+  'about.html',
+  'contact.html',
+  'news.html',
+  'attendance.html',
+  'admin-attendance.html',
+  'attendance-system.js',
+  'top students.html',
+  'style.css',
+  'manifest.json',
+  'icon-192.png',
+  'icon-512.png',
+  'images/logo.jpg',
+  'images/hero-panorama.webp'
 ];
 
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => cache.addAll(urlsToCache))
+  );
+});
+
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(keys => Promise.all(
+      keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
+    ))
   );
 });
 
