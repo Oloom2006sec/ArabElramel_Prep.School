@@ -102,11 +102,17 @@
         const rows = await res.json();
         const sorted = rows
   .filter(row => row["الاسم"])
-  .sort((a, b) => {
-    const totalA = parseFloat(a["المجموع (280/140)"] || a["المجموع (280/140) "] || 0);
-    const totalB = parseFloat(b["المجموع (280/140)"] || b["المجموع (280/140) "] || 0);
-    return totalB - totalA;
+  .map(row => {
+    const totalKey = Object.keys(row).find(k =>
+      k.includes("المجموع")
+    );
+
+    return {
+      ...row,
+      total: parseFloat(row[totalKey] || 0)
+    };
   })
+  .sort((a, b) => b.total - a.total)
   .slice(0, 10);
 
 body.innerHTML = sorted.length
@@ -114,14 +120,10 @@ body.innerHTML = sorted.length
       <tr>
         <td>${index + 1}</td>
         <td>${escapeHTML(row["الاسم"])}</td>
-        <td>${escapeHTML(
-          row["المجموع (280/140)"] ||
-          row["المجموع (280/140) "] ||
-          ""
-        )}</td>
+        <td>${row.total}</td>
       </tr>
     `).join("")
-          : `<tr><td colspan="3">لا توجد بيانات أوائل متاحة حاليًا.</td></tr>`;
+  : `<tr><td colspan="3">لا توجد بيانات أوائل متاحة حالياً.</td></tr>`;
       } catch (error) {
         body.innerHTML = `<tr><td colspan="3">تعذر تحميل البيانات الآن.</td></tr>`;
       }
