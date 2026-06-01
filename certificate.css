@@ -198,16 +198,12 @@ body.certificate-body {
 }
 
 .stamp-circle{
-    position:absolute;
-    bottom:120px;
-    left:65px;
-    z-index:10;
+    margin-top:10px;
 }
 
 .stamp-circle img{
     width:90px;
     opacity:0.8;
-    transform:rotate(-12deg);
 }
 .certificate-alert {
   max-width: 760px;
