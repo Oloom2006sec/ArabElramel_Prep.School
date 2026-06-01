@@ -199,7 +199,7 @@ body.certificate-body {
 
 .stamp-circle{
     position:absolute;
-    bottom:65px;
+    bottom:120px;
     left:65px;
     z-index:10;
 }
