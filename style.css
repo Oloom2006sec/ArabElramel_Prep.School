@@ -433,3 +433,35 @@ a {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+@media print {
+  body.print-result-mode > *:not(main) {
+    display: none !important;
+  }
+
+  body.print-result-mode main > *:not(.content-band) {
+    display: none !important;
+  }
+
+  body.print-result-mode .content-band {
+    padding: 0 !important;
+  }
+
+  body.print-result-mode .result-panel > .row,
+  body.print-result-mode #actionButtons {
+    display: none !important;
+  }
+
+  body.print-result-mode .result-panel {
+    max-width: none !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+  }
+
+  body.print-result-mode #resultCard {
+    display: block !important;
+    box-shadow: none !important;
+    border: 0 !important;
+  }
+}
