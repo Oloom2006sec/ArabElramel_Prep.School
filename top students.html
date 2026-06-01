@@ -53,7 +53,7 @@
               <h2 class="h4 fw-bold mb-3">أوائل الصف الأول الإعدادي</h2>
               <div class="school-table table-responsive">
                 <table class="table table-bordered align-middle" id="top-ula">
-                  <thead><tr><th>الترتيب</th><th>الاسم</th><th>المجموع الكلي</th></tr></thead>
+                  <thead><tr><th>الترتيب</th><th>الاسم</th><th>المجموع</th></tr></thead>
                   <tbody><tr><td colspan="3">جار التحميل...</td></tr></tbody>
                 </table>
               </div>
@@ -64,7 +64,7 @@
               <h2 class="h4 fw-bold mb-3">أوائل الصف الثاني الإعدادي</h2>
               <div class="school-table table-responsive">
                 <table class="table table-bordered align-middle" id="top-thania">
-                  <thead><tr><th>الترتيب</th><th>الاسم</th><th>المجموع الكلي</th></tr></thead>
+                  <thead><tr><th>الترتيب</th><th>الاسم</th><th>المجموع</th></tr></thead>
                   <tbody><tr><td colspan="3">جار التحميل...</td></tr></tbody>
                 </table>
               </div>
@@ -101,12 +101,18 @@
         const res = await fetch(`${API_BASE}/${encodeURIComponent(sheetName)}`);
         const rows = await res.json();
         const sorted = rows
-          .filter(row => row["الاسم"] && row["المجموع الكلى"])
-          .sort((a, b) => parseFloat(b["المجموع الكلى"]) - parseFloat(a["المجموع الكلى"]))
-          .slice(0, 10);
+  .filter(row => row["الاسم"] && row["المجموع (280/140)"])
+  .sort((a, b) => parseFloat(b["المجموع (280/140)"] || 0) - parseFloat(a["المجموع (280/140)"] || 0))
+  .slice(0, 10);
 
-        body.innerHTML = sorted.length
-          ? sorted.map((row, index) => `<tr><td>${index + 1}</td><td>${escapeHTML(row["الاسم"])}</td><td>${escapeHTML(row["المجموع الكلى"])}</td></tr>`).join("")
+body.innerHTML = sorted.length
+  ? sorted.map((row, index) => `
+      <tr>
+        <td>${index + 1}</td>
+        <td>${escapeHTML(row["الاسم"])}</td>
+        <td>${escapeHTML(row["المجموع (280/140)"])}</td>
+      </tr>
+    `).join("")
           : `<tr><td colspan="3">لا توجد بيانات أوائل متاحة حاليًا.</td></tr>`;
       } catch (error) {
         body.innerHTML = `<tr><td colspan="3">تعذر تحميل البيانات الآن.</td></tr>`;
