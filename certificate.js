@@ -169,7 +169,11 @@ function renderCertificate(row, template) {
           <div>${escapeHTML(certificateState(row))}</div>
         </div>
 
-        <div class="second-round">موعد امتحان الدور الثانى فى  2026/07/25</div>
+        ${certificateState(row).includes("ناجح") ? "" : `
+<div class="second-round">
+  موعد امتحان الدور الثانى فى 2026/07/25
+</div>
+`}
 
         <div class="signatures">
           <div class="signature-box">
