@@ -180,9 +180,7 @@ function renderCertificate(row, template) {
             <div>مسئول الصف</div>
             <div class="signature-name">د/ بسمة محفوظ</div>
             <div class="signature-name">توقيع وكيلة المدرسة</div>
-            <div class="stamp-circle">
-   <img src="images/stamp.png" alt="ختم المدرسة">
-</div>
+            
           </div>
           <div class="signature-box">
             <div>رئيس الكنترول</div>
@@ -192,6 +190,9 @@ function renderCertificate(row, template) {
             <div>مدير المدرسة</div>
             <div class="signature-name">ا/عزب عبد المنعم</div>
             <div class="signature-name">توقيع مدير المدرسة</div>
+            <div class="stamp-circle">
+   <img src="images/stamp.png" alt="ختم المدرسة">
+</div>
           </div>
         </div>
       </div>
