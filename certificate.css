@@ -197,17 +197,10 @@ body.certificate-body {
   font-weight: 700;
 }
 
-.stamp-box {
-  width: 32mm;
-  height: 32mm;
-  margin: 7mm auto 0;
-  border: 2px dashed #000;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  font-size: 10pt;
-  font-weight: 800;
-  color: #333;
+.stamp-circle img{
+    width:120px;
+    opacity:0.75;
+    transform:rotate(-12deg);
 }
 
 .certificate-alert {
