@@ -1,7 +1,10 @@
-const CACHE_NAME = 'arab-elramel-v3';
+const CACHE_NAME = 'arab-elramel-v6';
 const urlsToCache = [
   'index.html',
   'results.html',
+  'certificate.html',
+  'certificate.css',
+  'certificate.js',
   'about.html',
   'contact.html',
   'news.html',
